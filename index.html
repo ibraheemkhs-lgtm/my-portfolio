@@ -591,6 +591,87 @@
         </div>
     </section>
 
+    <!-- --- SMART NETWORK DIAGNOSTICS --- -->
+    <section class="section" id="network-speed" style="background: var(--bg-card); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">أداة قياس تفاعلية</span>
+                <h2 class="section-title">فحص سرعة الشبكة والتشخيص الذكي</h2>
+                <p class="section-desc">اختبر جودة وسرعة اتصالك بالإنترنت الآن، واحصل على نصائح وحلول فورية لتحسين أداء شبكتك وأنظمة المراقبة لديك.</p>
+            </div>
+
+            <div class="speed-test-wrapper">
+                <div class="speed-test-card">
+                    <!-- Gauge Container -->
+                    <div class="gauge-outer">
+                        <div class="gauge-body">
+                            <div class="gauge-fill" id="gaugeFill"></div>
+                            <div class="gauge-cover">
+                                <span class="speed-value" id="speedValue">0</span>
+                                <span class="speed-unit">Mbps</span>
+                            </div>
+                        </div>
+                        <div class="gauge-needle-wrapper">
+                            <div class="gauge-needle" id="gaugeNeedle"></div>
+                        </div>
+                    </div>
+
+                    <!-- Progress / Testing Phase -->
+                    <div class="test-phase" id="testPhase">جاهز لبدء الفحص</div>
+
+                    <!-- Metrics Grid -->
+                    <div class="metrics-grid">
+                        <div class="metric-box">
+                            <i class="fas fa-arrow-down download-icon"></i>
+                            <span class="metric-label">التحميل (Download)</span>
+                            <span class="metric-val" id="downloadVal">-</span>
+                        </div>
+                        <div class="metric-box">
+                            <i class="fas fa-arrow-up upload-icon"></i>
+                            <span class="metric-label">الرفع (Upload)</span>
+                            <span class="metric-val" id="uploadVal">-</span>
+                        </div>
+                        <div class="metric-box">
+                            <i class="fas fa-tachometer-alt ping-icon"></i>
+                            <span class="metric-label">البنج (Ping)</span>
+                            <span class="metric-val" id="pingVal">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Button -->
+                    <button class="btn btn-primary" id="startSpeedTestBtn" style="width: 100%; margin-top: 20px; justify-content: center; gap: 10px;">
+                        <i class="fas fa-play"></i> ابدأ الفحص الآن
+                    </button>
+                </div>
+
+                <!-- Results and Solutions Box -->
+                <div class="solutions-card" id="solutionsCard" style="display: none;">
+                    <div class="solutions-header">
+                        <div class="status-badge" id="networkStatusBadge">تحليل الشبكة</div>
+                        <h3 id="solutionsTitle" style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin: 0;">نتائج الفحص والتشخيص الذكي</h3>
+                    </div>
+                    <div class="solutions-body">
+                        <p class="solutions-intro" id="solutionsIntro" style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 20px;"></p>
+                        
+                        <div class="solutions-list-wrapper">
+                            <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; color: var(--text-main);">📋 الحلول والتحسينات المقترحة لشبكتك:</h4>
+                            <ul class="solutions-list" id="solutionsList">
+                                <!-- Populated dynamically -->
+                            </ul>
+                        </div>
+
+                        <div class="contact-advice" style="text-align: center; border-top: 1px solid var(--border-color); padding-top: 20px; margin-top: 20px;">
+                            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 15px;">هل تعاني من مشاكل مستمرة في تغطية الواي فاي أو بطء استجابة الكاميرات؟</p>
+                            <a href="https://wa.me/972593417639" target="_blank" class="btn btn-outline" style="display: inline-flex; justify-content: center; gap: 8px; width: 100%;">
+                                <i class="fab fa-whatsapp" style="color: #25d366;"></i> استشر مهندسي فيرون تيك مجاناً
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- --- TECH NEWS SECTION --- -->
     <section class="section" id="news">
         <div class="container">

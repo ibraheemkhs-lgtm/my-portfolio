@@ -1673,6 +1673,269 @@ body.dark-mode .btn-wizard-prev:hover {
     box-shadow: 0 15px 30px rgba(59, 130, 246, 0.3);
 }
 
+/* --- SPEED TEST SECTION --- */
+.speed-test-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: start;
+    margin-top: 30px;
+}
+
+@media (max-width: 991px) {
+    .speed-test-wrapper {
+        grid-template-columns: 1fr;
+    }
+}
+
+.speed-test-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: var(--shadow-main);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.solutions-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: var(--shadow-main);
+    animation: fadeIn 0.5s ease;
+}
+
+/* Speedometer Gauge styling */
+.gauge-outer {
+    position: relative;
+    width: 240px;
+    height: 120px; /* Semi-circle */
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.gauge-body {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 240px;
+    height: 240px; /* Full circle to cut in half */
+    border-radius: 50%;
+    background: var(--border-color);
+    box-sizing: border-box;
+}
+
+.gauge-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    background: conic-gradient(from 180deg, var(--accent) 0deg, var(--secondary) 180deg);
+    transform: rotate(0deg);
+    transform-origin: center;
+    transition: transform 0.1s linear;
+}
+
+.gauge-cover {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: var(--bg-card);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 35px;
+    box-sizing: border-box;
+}
+
+.speed-value {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-main);
+    line-height: 1;
+    font-family: 'Outfit', sans-serif;
+}
+
+.speed-unit {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 5px;
+}
+
+.gauge-needle-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 0;
+}
+
+.gauge-needle {
+    position: absolute;
+    bottom: 0;
+    left: -4px;
+    width: 8px;
+    height: 90px;
+    background-color: var(--text-main);
+    border-radius: 4px;
+    transform-origin: bottom center;
+    transform: rotate(-90deg); /* Range is -90deg (0 Mbps) to 90deg (100+ Mbps) */
+    transition: transform 0.1s linear;
+}
+
+.test-phase {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 25px;
+    height: 24px;
+}
+
+/* Metrics Grid styling */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    width: 100%;
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
+}
+
+.metric-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+.metric-box i {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+}
+
+.download-icon { color: var(--accent); }
+.upload-icon { color: var(--secondary); }
+.ping-icon { color: #f39c12; }
+
+.metric-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+}
+
+.metric-val {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Solutions Panel styling */
+.solutions-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+.status-badge {
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.status-badge.excellent {
+    background-color: rgba(46, 204, 113, 0.15);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.3);
+}
+
+.status-badge.good {
+    background-color: rgba(52, 152, 219, 0.15);
+    color: #3498db;
+    border: 1px solid rgba(52, 152, 219, 0.3);
+}
+
+.status-badge.weak {
+    background-color: rgba(231, 76, 60, 0.15);
+    color: #e74c3c;
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.solutions-intro {
+    font-size: 0.95rem;
+    color: var(--text-main);
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.solutions-list-wrapper {
+    background-color: rgba(255, 255, 255, 0.01);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.solutions-list-wrapper h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--text-main);
+}
+
+.solutions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.solutions-list li {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    position: relative;
+    padding-right: 20px;
+    margin-bottom: 8px;
+}
+
+.solutions-list li::before {
+    content: "•";
+    position: absolute;
+    right: 0;
+    color: var(--accent);
+    font-weight: bold;
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.contact-advice {
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+}
+
 /* --- RESPONSIVENESS --- */
 @media (max-width: 1024px) {
     .services-grid {
