@@ -383,6 +383,13 @@ ${noteStr}
                     "تطور أنظمة التحكم بالوصول الذكية القائمة على القياسات الحيوية (Biometrics Access)"
                 ];
                 
+                const fallbackImages = [
+                    "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=600&q=80", // CCTV
+                    "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=600&q=80", // Networks
+                    "https://images.unsplash.com/photo-1516216628859-9bccecab13ca?auto=format&fit=crop&w=600&q=80", // Fire Alarm
+                    "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80"  // LED Screen
+                ];
+
                 latestArticles.forEach((item, index) => {
                     // Extract clean text from description
                     const temp = document.createElement('div');
@@ -400,17 +407,44 @@ ${noteStr}
                         day: 'numeric'
                     });
 
+                    // Extract image URL from RSS item
+                    let imageUrl = "";
+                    if (item.thumbnail) {
+                        imageUrl = item.thumbnail;
+                    } else if (item.enclosure && item.enclosure.link) {
+                        imageUrl = item.enclosure.link;
+                    } else {
+                        const imgMatch = item.description ? item.description.match(/<img[^>]+src=["']([^"']+)["']/i) : null;
+                        if (imgMatch && imgMatch[1]) {
+                            imageUrl = imgMatch[1];
+                        } else {
+                            const contentMatch = item.content ? item.content.match(/<img[^>]+src=["']([^"']+)["']/i) : null;
+                            if (contentMatch && contentMatch[1]) {
+                                imageUrl = contentMatch[1];
+                            }
+                        }
+                    }
+
+                    if (!imageUrl || typeof imageUrl !== 'string' || imageUrl.trim() === '') {
+                        imageUrl = fallbackImages[index % fallbackImages.length];
+                    }
+
                     // We will overlay custom Arabic tech titles for professional localization if matched, or keep original beautifully translated
                     const displayTitle = arabicTitles[index] || item.title;
 
                     const newsCard = document.createElement('div');
                     newsCard.className = 'news-card';
                     newsCard.innerHTML = `
-                        <h4 class="news-title">${displayTitle}</h4>
-                        <p class="news-excerpt">${cleanDesc}</p>
-                        <div class="news-meta">
-                            <span class="news-date"><i class="far fa-calendar-alt"></i> ${formattedDate}</span>
-                            <a href="${item.link}" target="_blank" class="news-link">إقرأ المزيد <i class="fas fa-external-link-alt"></i></a>
+                        <div class="news-image-wrapper">
+                            <img src="${imageUrl}" alt="${displayTitle}" class="news-image" onerror="this.src='${fallbackImages[index % fallbackImages.length]}'">
+                        </div>
+                        <div class="news-content">
+                            <h4 class="news-title">${displayTitle}</h4>
+                            <p class="news-excerpt">${cleanDesc}</p>
+                            <div class="news-meta">
+                                <span class="news-date"><i class="far fa-calendar-alt"></i> ${formattedDate}</span>
+                                <a href="${item.link}" target="_blank" class="news-link">إقرأ المزيد <i class="fas fa-external-link-alt"></i></a>
+                            </div>
                         </div>
                     `;
                     newsContainer.appendChild(newsCard);
@@ -420,38 +454,58 @@ ${noteStr}
             }
         } catch (error) {
             console.error('Error fetching live RSS news:', error);
-            // Fallback Beautiful Technical Articles
+            // Fallback Beautiful Technical Articles with Images
             newsContainer.innerHTML = `
                 <div class="news-card">
-                    <h4 class="news-title">الفروقات الجوهرية بين كاميرات المراقبة IP وأنظمة Analog</h4>
-                    <p class="news-excerpt">دراسة فنية مفصلة توضح لماذا تتفوق كاميرات الشبكة IP في التحليل الذكي للوجوه ولوحات السيارات، بينما توفر أنظمة Analog تكلفة ممتازة للمشاريع الأساسية.</p>
-                    <div class="news-meta">
-                        <span class="news-date"><i class="far fa-calendar-alt"></i> 15 مايو 2026</span>
-                        <a href="#systems-compare" class="news-link">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
+                    <div class="news-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=600&q=80" alt="كاميرات المراقبة IP وأنظمة Analog" class="news-image">
+                    </div>
+                    <div class="news-content">
+                        <h4 class="news-title">الفروقات الجوهرية بين كاميرات المراقبة IP وأنظمة Analog</h4>
+                        <p class="news-excerpt">دراسة فنية مفصلة توضح لماذا تتفوق كاميرات الشبكة IP في التحليل الذكي للوجوه ولوحات السيارات، بينما توفر أنظمة Analog تكلفة ممتازة للمشاريع الأساسية.</p>
+                        <div class="news-meta">
+                            <span class="news-date"><i class="far fa-calendar-alt"></i> 15 مايو 2026</span>
+                            <a href="#compare" class="news-link">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
+                        </div>
                     </div>
                 </div>
                 <div class="news-card">
-                    <h4 class="news-title">أهمية جدران الحماية Fortinet في تأمين شبكات الشركات الفلسطينية</h4>
-                    <p class="news-excerpt">كيف تساهم أنظمة FortiGate في عزل شبكات المراقبة والكاميرات الذكية عن بيانات الموظفين لرفع مستويات الحماية السيبرانية وحظر التسلل الخارجي.</p>
-                    <div class="news-meta">
-                        <span class="news-date"><i class="far fa-calendar-alt"></i> 12 مايو 2026</span>
-                        <a href="#systems-compare" class="news-link">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
+                    <div class="news-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=600&q=80" alt="جدران الحماية Fortinet" class="news-image">
+                    </div>
+                    <div class="news-content">
+                        <h4 class="news-title">أهمية جدران الحماية Fortinet في تأمين شبكات الشركات الفلسطينية</h4>
+                        <p class="news-excerpt">كيف تساهم أنظمة FortiGate في عزل شبكات المراقبة والكاميرات الذكية عن بيانات الموظفين لرفع مستويات الحماية السيبرانية وحظر التسلل الخارجي.</p>
+                        <div class="news-meta">
+                            <span class="news-date"><i class="far fa-calendar-alt"></i> 12 مايو 2026</span>
+                            <a href="#services" class="news-link">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
+                        </div>
                     </div>
                 </div>
                 <div class="news-card">
-                    <h4 class="news-title">دليل الدفاع المدني الفلسطيني لاعتماد أنظمة إنذار الحريق Hochiki</h4>
-                    <p class="news-excerpt">توضيح لمعايير السلامة الـ NFPA والأنظمة المعنونة اليابانية التي تسهل عملية ترخيص المنشآت والمصانع التجارية الكبرى داخل مدن فلسطين.</p>
-                    <div class="news-meta">
-                        <span class="news-date"><i class="far fa-calendar-alt"></i> 08 مايو 2026</span>
-                        <a href="#systems-compare" class="news-link">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
+                    <div class="news-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1516216628859-9bccecab13ca?auto=format&fit=crop&w=600&q=80" alt="أنظمة إنذار الحريق Hochiki" class="news-image">
+                    </div>
+                    <div class="news-content">
+                        <h4 class="news-title">دليل الدفاع المدني الفلسطيني لاعتماد أنظمة إنذار الحريق Hochiki</h4>
+                        <p class="news-excerpt">توضيح لمعايير السلامة الـ NFPA والأنظمة المعنونة اليابانية التي تسهل عملية ترخيص المنشآت والمصانع التجارية الكبرى داخل مدن فلسطين.</p>
+                        <div class="news-meta">
+                            <span class="news-date"><i class="far fa-calendar-alt"></i> 08 مايو 2026</span>
+                            <a href="#services" class="news-link">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
+                        </div>
                     </div>
                 </div>
                 <div class="news-card">
-                    <h4 class="news-title">شاشات المديول LED: الخيار القادم للإعلانات وغرف العمليات الكبرى</h4>
-                    <p class="news-excerpt">تحليل للتوجه المتزايد نحو شاشات العرض الذكية عالية السطوع لإدارة المراقبة التلفزيونية وبناء لوحات إعلانية مميزة في الشوارع والمجمعات الفلسطينية.</p>
-                    <div class="news-meta">
-                        <span class="news-date"><i class="far fa-calendar-alt"></i> 05 مايو 2026</span>
-                        <a href="#systems-compare" class="news-link">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
+                    <div class="news-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80" alt="شاشات المديول LED" class="news-image">
+                    </div>
+                    <div class="news-content">
+                        <h4 class="news-title">شاشات المديول LED: الخيار القادم للإعلانات وغرف العمليات الكبرى</h4>
+                        <p class="news-excerpt">تحليل للتوجه المتزايد نحو شاشات العرض الذكية عالية السطوع لإدارة المراقبة التلفزيونية وبناء لوحات إعلانية مميزة في الشوارع والمجمعات الفلسطينية.</p>
+                        <div class="news-meta">
+                            <span class="news-date"><i class="far fa-calendar-alt"></i> 05 مايو 2026</span>
+                            <a href="#services" class="news-link">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
+                        </div>
                     </div>
                 </div>
             `;
