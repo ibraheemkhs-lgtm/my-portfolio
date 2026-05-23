@@ -732,9 +732,9 @@
                 <div class="footer-newsletter">
                     <h4 class="footer-title">القائمة البريدية</h4>
                     <p>اشترك لتصلك أحدث المقالات التوضيحية وإرشادات الأمان الرقمي في فلسطين.</p>
-                    <form class="newsletter-form" onsubmit="event.preventDefault(); alert('شكرًا لك على الاشتراك في قائمتنا البريدية!'); this.reset();">
-                        <input type="email" placeholder="البريد الإلكتروني" required>
-                        <button type="submit">إرسال</button>
+                    <form class="newsletter-form" id="newsletterForm">
+                        <input type="email" name="email" placeholder="البريد الإلكتروني" required>
+                        <button type="submit" id="newsletterSubmitBtn">إرسال</button>
                     </form>
                 </div>
             </div>
@@ -747,6 +747,6 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="main.js"></script>
+    <script src="main.js?v=5.0"></script>
 </body>
 </html>
