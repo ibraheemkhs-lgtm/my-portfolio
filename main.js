@@ -848,21 +848,22 @@ ${noteStr}
         let uploadSuccess = false;
 
         try {
-            // Build a 3 MB random buffer (random to prevent compression shortcuts)
+            // Use text/plain MIME type on the Blob – this is a CORS-safelisted content-type,
+            // so the browser skips the OPTIONS preflight entirely (works from any origin).
             const size = 3 * 1024 * 1024;
             const buf = new Uint8Array(size);
             crypto.getRandomValues(buf.subarray(0, Math.min(size, 65536)));
+            const blob = new Blob([buf], { type: 'text/plain' });
 
             const t0 = performance.now();
-            const resp = await fetch('https://speed.cloudflare.com/__up?t=' + Date.now(), {
+            await fetch('https://speed.cloudflare.com/__up?t=' + Date.now(), {
                 method: 'POST',
-                body: buf,
-                cache: 'no-store',
-                headers: { 'Content-Type': 'application/octet-stream' }
+                body: blob,
+                mode: 'no-cors',   // avoids CORS preflight; response is opaque but timing is real
+                cache: 'no-store'
             });
             const elapsed = (performance.now() - t0) / 1000;
 
-            // Cloudflare __up returns 200 with timing JSON
             if (elapsed > 0.3) {
                 maxUpload = Math.round((size * 8) / (elapsed * 1e6));
                 uploadSuccess = true;
