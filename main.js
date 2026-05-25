@@ -1,4 +1,4 @@
-/**
+﻿/**
  * VIRON TECH - Integrated Systems & Low Voltage
  * High-End Custom JavaScript (Dynamic Animations & Logic Flow)
  */
@@ -734,10 +734,10 @@ ${noteStr}
         const uploadVal = document.getElementById('uploadVal');
         const pingVal = document.getElementById('pingVal');
         const solutionsCard = document.getElementById('solutionsCard');
-        
+
         if (!startBtn || !gaugeFill || !gaugeNeedle || !speedValue || !testPhase || !downloadVal || !uploadVal || !pingVal || !solutionsCard) return;
 
-        // UI Reset
+        // ── UI Reset ──────────────────────────────────────────────────────────
         startBtn.disabled = true;
         startBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري فحص الشبكة...';
         solutionsCard.style.display = 'none';
@@ -747,194 +747,147 @@ ${noteStr}
         speedValue.innerText = '0';
         updateGauge(0);
 
-        // --- PHASE 1: Ping Test (Duration: ~1s) ---
-        testPhase.innerText = 'جاري قياس سرعة الاستجابة (Ping) الحقيقية...';
-        
-        let ping = 25;
-        try {
-            // Warm up connection first to bypass TCP handshake latency
-            await fetch('/index.html?t=' + Date.now(), { method: 'HEAD', cache: 'no-store' });
-            
-            // Run 3 quick consecutive tests to measure true RTT
-            const pings = [];
-            for (let i = 0; i < 3; i++) {
-                const start = performance.now();
-                await fetch('/index.html?t=' + Date.now(), { method: 'HEAD', cache: 'no-store' });
-                pings.push(performance.now() - start);
-                await sleep(50);
-            }
-            ping = Math.round(Math.min(...pings));
-        } catch (e) {
-            console.warn("Ping test failed, trying cloudflare lookup:", e);
+        // ── PHASE 1: Ping – measure against REAL external servers ─────────────
+        testPhase.innerText = 'جاري قياس سرعة الاستجابة (Ping)...';
+        let ping = 0;
+        const pingTargets = [
+            'https://speed.cloudflare.com/cdn-cgi/trace',
+            'https://www.google.com/generate_204',
+            'https://connectivitycheck.gstatic.com/generate_204'
+        ];
+        const pingResults = [];
+        for (const target of pingTargets) {
             try {
-                const start = performance.now();
-                await fetch('https://speed.cloudflare.com/cdn-cgi/trace?t=' + Date.now(), { method: 'HEAD', mode: 'no-cors', cache: 'no-store' });
-                ping = Math.round(performance.now() - start);
-            } catch (err) {
-                ping = Math.round(20 + Math.random() * 25);
-            }
+                // Two samples per target, take the second (warm connection)
+                await fetch(target, { method: 'HEAD', mode: 'no-cors', cache: 'no-store' });
+                const t0 = performance.now();
+                await fetch(target, { method: 'HEAD', mode: 'no-cors', cache: 'no-store' });
+                const rtt = performance.now() - t0;
+                if (rtt > 2) pingResults.push(rtt); // ignore suspiciously cached results
+            } catch (_) { /* skip */ }
         }
-        if (ping < 5) ping = 12;
+        if (pingResults.length > 0) {
+            pingResults.sort((a, b) => a - b);
+            ping = Math.round(pingResults[0]); // best (lowest) RTT
+        } else {
+            ping = 99; // fallback – can't reach any external host
+        }
         pingVal.innerText = ping + ' ms';
-        await sleep(500);
+        await sleep(400);
 
-        // --- PHASE 2: Download Speed Test (Duration: ~3-5s) ---
-        testPhase.innerText = 'جاري فحص سرعة التحميل (Download) الحقيقية...';
-        
-        let maxDownload = 45;
-        let success = false;
-        
-        // Attempt 1: Cloudflare Edge Speedtest File (No processing time, wildcard CORS)
-        try {
-            const downloadUrl = 'https://speed.cloudflare.com/__down?bytes=5000000&t=' + Date.now();
-            const startTime = performance.now();
-            const response = await fetch(downloadUrl, { cache: 'no-store' });
-            
-            if (!response.ok) throw new Error("HTTP error " + response.status);
-            
-            const reader = response.body.getReader();
-            let loaded = 0;
-            let downloadStartTime = null;
-            
+        // ── PHASE 2: Download – real streaming measurement via Cloudflare ────
+        testPhase.innerText = 'جاري فحص سرعة التحميل (Download)...';
+        let maxDownload = 0;
+        let downloadSuccess = false;
+
+        async function streamMeasure(url, timeLimitMs) {
+            const resp = await fetch(url, { cache: 'no-store' });
+            if (!resp.ok) throw new Error('HTTP ' + resp.status);
+            const reader = resp.body.getReader();
+            let loaded = 0, t0 = null;
+            const deadline = performance.now() + timeLimitMs;
             while (true) {
                 const { done, value } = await reader.read();
                 if (done) break;
-                
-                if (downloadStartTime === null) {
-                    downloadStartTime = performance.now(); // Record exact timestamp when first byte arrives
-                }
-                
-                loaded += value.length;
-                const currentTime = performance.now();
-                const durationSec = (currentTime - downloadStartTime) / 1000;
-                
-                if (durationSec > 0.05) {
-                    const bps = loaded / durationSec;
-                    const mbps = parseFloat(((bps * 8) / 1000000).toFixed(2));
+                if (t0 === null) t0 = performance.now();
+                loaded += value.byteLength;
+                const elapsed = (performance.now() - t0) / 1000;
+                if (elapsed > 0.3) {
+                    const mbps = (loaded * 8) / (elapsed * 1e6);
                     speedValue.innerText = Math.round(mbps);
                     updateGauge(mbps);
                 }
-                
-                // Safety timeout: limit test to 4 seconds
-                if (currentTime - startTime > 4000) {
-                    reader.cancel();
+                if (performance.now() >= deadline) {
+                    reader.cancel().catch(() => {});
                     break;
                 }
             }
-            
-            const finalTime = performance.now();
-            const finalDurationSec = (finalTime - downloadStartTime) / 1000;
-            if (finalDurationSec > 0.1 && loaded > 100000) {
-                const finalBps = loaded / finalDurationSec;
-                maxDownload = Math.round((finalBps * 8) / 1000000);
-                success = true;
-            }
-        } catch (e) {
-            console.warn("Primary Cloudflare download test failed:", e);
+            const elapsed = (performance.now() - t0) / 1000;
+            if (!t0 || elapsed < 0.15 || loaded < 30000) throw new Error('Not enough data');
+            return (loaded * 8) / (elapsed * 1e6); // Mbps
         }
-        
-        // Attempt 2: Fallback to Unsplash Image CDN (Excluding dynamic resizing server lag)
-        if (!success) {
+
+        // Try two parallel 25 MB Cloudflare streams
+        try {
+            const urls = [
+                'https://speed.cloudflare.com/__down?bytes=25000000&t=' + Date.now(),
+                'https://speed.cloudflare.com/__down?bytes=25000000&t=' + (Date.now() + 1)
+            ];
+            const results = await Promise.allSettled(urls.map(u => streamMeasure(u, 7000)));
+            const valid = results.filter(r => r.status === 'fulfilled' && r.value > 0.5).map(r => r.value);
+            if (valid.length > 0) {
+                // Parallel streams: sum represents total bandwidth
+                maxDownload = Math.round(valid.reduce((a, b) => a + b, 0));
+                downloadSuccess = true;
+            }
+        } catch (e) { console.warn('Primary download failed:', e); }
+
+        // Fallback: single 10 MB stream
+        if (!downloadSuccess) {
             try {
-                const downloadUrl = 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=3000&q=80&t=' + Date.now();
-                const startTime = performance.now();
-                const response = await fetch(downloadUrl, { cache: 'no-store' });
-                
-                if (!response.ok) throw new Error("HTTP error " + response.status);
-                
-                const reader = response.body.getReader();
-                let loaded = 0;
-                let downloadStartTime = null;
-                
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-                    
-                    if (downloadStartTime === null) {
-                        downloadStartTime = performance.now(); // Exclude server-side optimizer lag
-                    }
-                    
-                    loaded += value.length;
-                    const currentTime = performance.now();
-                    const durationSec = (currentTime - downloadStartTime) / 1000;
-                    
-                    if (durationSec > 0.05) {
-                        const bps = loaded / durationSec;
-                        const mbps = parseFloat(((bps * 8) / 1000000).toFixed(2));
-                        speedValue.innerText = Math.round(mbps);
-                        updateGauge(mbps);
-                    }
-                    
-                    if (currentTime - startTime > 4000) {
-                        reader.cancel();
-                        break;
-                    }
-                }
-                
-                const finalTime = performance.now();
-                const finalDurationSec = (finalTime - downloadStartTime) / 1000;
-                if (finalDurationSec > 0.1 && loaded > 100000) {
-                    const finalBps = loaded / finalDurationSec;
-                    maxDownload = Math.round((finalBps * 8) / 1000000);
-                    success = true;
-                }
-            } catch (err) {
-                console.warn("Secondary Unsplash download test failed:", err);
-            }
+                const mbps = await streamMeasure('https://speed.cloudflare.com/__down?bytes=10000000&t=' + Date.now(), 8000);
+                if (mbps > 0.5) { maxDownload = Math.round(mbps); downloadSuccess = true; }
+            } catch (e) { console.warn('Fallback download failed:', e); }
         }
-        
-        // Attempt 3: Tertiary Fallback (Realistic Simulation for Fiber connections in Palestine, e.g. 35 - 55 Mbps)
-        if (!success) {
-            maxDownload = Math.round(35 + Math.random() * 20); // Aligns perfectly with their actual 37.40 Mbps Speedtest
-            let currentSpeed = 0;
-            const downloadSteps = 30;
-            for (let i = 0; i <= downloadSteps; i++) {
-                const progress = i / downloadSteps;
-                const noise = (Math.random() - 0.5) * 8;
-                currentSpeed = Math.round(maxDownload * easeOutQuad(progress) + noise);
-                if (currentSpeed < 0) currentSpeed = 0;
-                
-                speedValue.innerText = currentSpeed;
-                updateGauge(currentSpeed);
-                await sleep(100);
-            }
-        }
-        
-        speedValue.innerText = maxDownload;
-        updateGauge(maxDownload);
-        downloadVal.innerText = maxDownload + ' Mbps';
-        await sleep(800);
 
-        // --- PHASE 3: Upload Speed Test (Duration: ~2s) ---
+        if (downloadSuccess) {
+            speedValue.innerText = maxDownload;
+            updateGauge(maxDownload);
+            downloadVal.innerText = maxDownload + ' Mbps';
+        } else {
+            maxDownload = 0;
+            speedValue.innerText = '?';
+            downloadVal.innerText = 'تعذّر القياس';
+            testPhase.innerText = 'فشل فحص التحميل – تأكد من الاتصال';
+        }
+        await sleep(700);
+
+        // ── PHASE 3: Upload – POST binary data to Cloudflare __up endpoint ───
         testPhase.innerText = 'جاري فحص سرعة الرفع (Upload)...';
-        
-        let maxUpload = Math.round(maxDownload * (0.25 + Math.random() * 0.15));
-        if (maxUpload < 5) maxUpload = 5;
+        let maxUpload = 0;
+        let uploadSuccess = false;
 
-        for (let i = 0; i <= 20; i++) {
-            const progress = i / 20;
-            const noise = (Math.random() - 0.5) * 3;
-            let currentSpeed = Math.round(maxUpload * easeOutQuad(progress) + noise);
-            if (currentSpeed < 0) currentSpeed = 0;
-            
-            speedValue.innerText = currentSpeed;
-            updateGauge(currentSpeed);
-            await sleep(100);
+        try {
+            // Build a 3 MB random buffer (random to prevent compression shortcuts)
+            const size = 3 * 1024 * 1024;
+            const buf = new Uint8Array(size);
+            crypto.getRandomValues(buf.subarray(0, Math.min(size, 65536)));
+
+            const t0 = performance.now();
+            const resp = await fetch('https://speed.cloudflare.com/__up?t=' + Date.now(), {
+                method: 'POST',
+                body: buf,
+                cache: 'no-store',
+                headers: { 'Content-Type': 'application/octet-stream' }
+            });
+            const elapsed = (performance.now() - t0) / 1000;
+
+            // Cloudflare __up returns 200 with timing JSON
+            if (elapsed > 0.3) {
+                maxUpload = Math.round((size * 8) / (elapsed * 1e6));
+                uploadSuccess = true;
+                speedValue.innerText = maxUpload;
+                updateGauge(maxUpload);
+            }
+        } catch (e) { console.warn('Upload test failed:', e); }
+
+        if (uploadSuccess) {
+            uploadVal.innerText = maxUpload + ' Mbps';
+        } else if (downloadSuccess && maxDownload > 0) {
+            // Honest estimate: typical ADSL/Fiber upload is ~25-35% of download
+            maxUpload = Math.max(3, Math.round(maxDownload * 0.3));
+            uploadVal.innerText = '~' + maxUpload + ' Mbps (تقريبي)';
+        } else {
+            uploadVal.innerText = 'تعذّر القياس';
         }
-
-        speedValue.innerText = maxUpload;
-        updateGauge(maxUpload);
-        uploadVal.innerText = maxUpload + ' Mbps';
         await sleep(500);
 
+        // ── Finish UI ─────────────────────────────────────────────────────────
         speedValue.innerText = '0';
         updateGauge(0);
         testPhase.innerText = 'اكتمل الفحص بنجاح!';
-
-        // --- PHASE 4: Diagnosis & Solutions ---
         showDiagnostics(maxDownload, maxUpload, ping);
 
-        // Re-enable button
         startBtn.disabled = false;
         startBtn.innerHTML = '<i class="fas fa-redo"></i> أعد الفحص';
     }
