@@ -777,6 +777,7 @@ ${noteStr}
             requestSection.scrollIntoView({ behavior: 'smooth' });
         }
     };
+    const startTestBtn = document.getElementById('startSpeedTestBtn');
     if (startTestBtn) {
         startTestBtn.addEventListener('click', startNetworkDiagnostics);
     }
