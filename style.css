@@ -2026,3 +2026,260 @@ body.dark-mode .btn-wizard-prev:hover {
         text-align: center;
     }
 }
+
+/* --- DUAL SERVICE BUTTONS & DETAILS MODAL --- */
+.service-card-actions {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-top: auto;
+    padding-top: 15px;
+}
+
+.service-card-actions .service-action-btn {
+    margin-top: 0;
+    flex: 1;
+    transition: all 0.3s ease;
+    min-width: 0;
+    padding: 10px 12px;
+    font-size: 0.82rem;
+}
+
+.service-card-actions .btn-details {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+}
+
+.service-card-actions .btn-details:hover {
+    background-color: rgba(225, 11, 23, 0.05);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+body.dark-mode .service-card-actions .btn-details:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.service-card-actions .btn-request {
+    background-color: var(--accent);
+    border: 1px solid var(--accent);
+    color: #fff;
+}
+
+.service-card-actions .btn-request:hover {
+    background-color: transparent;
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* Override hover behavior on parent hover to keep actions isolated */
+.service-card:hover .service-action-btn {
+    border-color: inherit;
+    color: inherit;
+    background-color: inherit;
+}
+
+/* Explicit hover rules for our action buttons */
+.service-card:hover .service-card-actions .btn-details:hover {
+    background-color: rgba(225, 11, 23, 0.05);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.service-card:hover .service-card-actions .btn-request:hover {
+    background-color: transparent;
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* --- DETAILS MODAL --- */
+.service-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.service-modal.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(10, 10, 15, 0.75);
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+}
+
+.modal-content {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    width: 90%;
+    max-width: 650px;
+    max-height: 85vh;
+    border-radius: 24px;
+    position: relative;
+    z-index: 2;
+    overflow-y: auto;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    transform: translateY(30px) scale(0.95);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+}
+
+.service-modal.open .modal-content {
+    transform: translateY(0) scale(1);
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: 1px solid var(--border-color);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    z-index: 10;
+}
+
+.modal-close-btn:hover {
+    background-color: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 35px;
+    text-align: right;
+}
+
+.modal-header-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 20px;
+}
+
+.modal-header-info i {
+    font-size: 2rem;
+    color: var(--accent);
+    background-color: rgba(225, 11, 23, 0.08);
+    width: 55px;
+    height: 55px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.modal-header-info h3 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin: 0;
+    color: var(--text-main);
+}
+
+.modal-details-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 25px 0 12px 0;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.modal-tech-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.modal-tech-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+}
+
+.modal-tech-list li i {
+    color: var(--accent);
+    margin-top: 5px;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.modal-brands-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.modal-brand-tag {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.modal-footer-actions {
+    display: flex;
+    gap: 15px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 25px;
+    margin-top: 25px;
+}
+
+.modal-footer-actions .btn {
+    flex: 1;
+    justify-content: center;
+    text-align: center;
+}
+
+@media (max-width: 576px) {
+    .service-card-actions {
+        flex-direction: column;
+    }
+    .modal-body {
+        padding: 25px 20px;
+    }
+    .modal-header-info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .modal-footer-actions {
+        flex-direction: column;
+    }
+}

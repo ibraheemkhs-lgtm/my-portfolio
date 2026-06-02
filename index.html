@@ -247,10 +247,16 @@
                             <span class="brand-tag">Tiandy (تياندي)</span>
                         </div>
                     </div>
-                    <button class="service-action-btn" onclick="document.getElementById('compare').scrollIntoView();">
-                        <span>مقارنة IP و Analog</span>
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
+                    <div class="service-card-actions">
+                        <button class="service-action-btn btn-details" onclick="openServiceModal('cctv')">
+                            <span>التفاصيل</span>
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button class="service-action-btn btn-request" onclick="requestServiceDirect('cctv')">
+                            <span>طلب خدمة</span>
+                            <i class="fas fa-file-signature"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- 2. الشبكات -->
@@ -269,10 +275,16 @@
                             <span class="brand-tag">Aruba (عروبة/أروبا)</span>
                         </div>
                     </div>
-                    <button class="service-action-btn" onclick="document.getElementById('compare').scrollIntoView();">
-                        <span>تفاصيل الشبكات والربط</span>
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
+                    <div class="service-card-actions">
+                        <button class="service-action-btn btn-details" onclick="openServiceModal('networking')">
+                            <span>التفاصيل</span>
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button class="service-action-btn btn-request" onclick="requestServiceDirect('networking')">
+                            <span>طلب خدمة</span>
+                            <i class="fas fa-file-signature"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- 3. أنظمة الصوت -->
@@ -292,10 +304,16 @@
                             <span class="brand-tag">Audac</span>
                         </div>
                     </div>
-                    <button class="service-action-btn" onclick="document.getElementById('request').scrollIntoView();">
-                        <span>طلب تصميم صوتي</span>
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
+                    <div class="service-card-actions">
+                        <button class="service-action-btn btn-details" onclick="openServiceModal('sound')">
+                            <span>التفاصيل</span>
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button class="service-action-btn btn-request" onclick="requestServiceDirect('sound')">
+                            <span>طلب خدمة</span>
+                            <i class="fas fa-file-signature"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- 4. الأكسس كونترول -->
@@ -314,10 +332,16 @@
                             <span class="brand-tag">ZK-BioSecurity</span>
                         </div>
                     </div>
-                    <button class="service-action-btn" onclick="document.getElementById('request').scrollIntoView();">
-                        <span>طلب تفاصيل برمجية</span>
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
+                    <div class="service-card-actions">
+                        <button class="service-action-btn btn-details" onclick="openServiceModal('access')">
+                            <span>التفاصيل</span>
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button class="service-action-btn btn-request" onclick="requestServiceDirect('access')">
+                            <span>طلب خدمة</span>
+                            <i class="fas fa-file-signature"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- 5. أنظمة الإنذار -->
@@ -336,10 +360,16 @@
                             <span class="brand-tag">Teletek</span>
                         </div>
                     </div>
-                    <button class="service-action-btn" onclick="document.getElementById('request').scrollIntoView();">
-                        <span>طلب دراسة سلامة</span>
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
+                    <div class="service-card-actions">
+                        <button class="service-action-btn btn-details" onclick="openServiceModal('alarm')">
+                            <span>التفاصيل</span>
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button class="service-action-btn btn-request" onclick="requestServiceDirect('alarm')">
+                            <span>طلب خدمة</span>
+                            <i class="fas fa-file-signature"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- 6. شاشات العرض والمديول -->
@@ -357,10 +387,16 @@
                             <span class="brand-tag">Video Processors</span>
                         </div>
                     </div>
-                    <button class="service-action-btn" onclick="document.getElementById('request').scrollIntoView();">
-                        <span>تصميم شاشة مديول</span>
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
+                    <div class="service-card-actions">
+                        <button class="service-action-btn btn-details" onclick="openServiceModal('led')">
+                            <span>التفاصيل</span>
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                        <button class="service-action-btn btn-request" onclick="requestServiceDirect('led')">
+                            <span>طلب خدمة</span>
+                            <i class="fas fa-file-signature"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -745,6 +781,19 @@
             </div>
         </div>
     </footer>
+
+    <!-- --- SERVICE DETAILS MODAL --- -->
+    <div class="service-modal" id="serviceDetailsModal" aria-hidden="true" role="dialog">
+        <div class="modal-overlay" onclick="closeServiceModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeServiceModal()" aria-label="إغلاق النافذة">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-body" id="modalBodyContent">
+                <!-- Content will be injected dynamically -->
+            </div>
+        </div>
+    </div>
 
     <!-- Scripts -->
     <script src="main.js?v=6.0"></script>

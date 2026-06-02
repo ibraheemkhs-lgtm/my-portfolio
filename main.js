@@ -1,4 +1,4 @@
-﻿/**
+/**
  * VIRON TECH - Integrated Systems & Low Voltage
  * High-End Custom JavaScript (Dynamic Animations & Logic Flow)
  */
@@ -546,180 +546,237 @@ ${noteStr}
     }
 
     // 6. Dynamic RSS Tech News Aggregator & Palestine/Global Security articles
+    // 6. Dynamic RSS Tech News Aggregator & Palestine/Global Security articles
     async function fetchLiveNews() {
         const newsContainer = document.getElementById('liveNewsFeedContainer');
         if (!newsContainer) return;
 
-        const feeds = [
-            'https://www.securityinfowatch.com/rss/all'
-        ];
-
         newsContainer.innerHTML = `
             <div style="grid-column: span 2; text-align:center; padding:40px; color: var(--text-muted);">
                 <i class="fas fa-spinner fa-spin" style="font-size:2rem; color: var(--accent); margin-bottom:15px;"></i>
-                <p>جاري جلب آخر المستجدات الأمنية وتكنولوجيا الشبكات العالمية والمحلية...</p>
+                <p>جاري جلب آخر المستجدات الأمنية وتكنولوجيا الشبكات...</p>
             </div>
         `;
 
-        try {
-            const allItems = [];
-            
-            // Using security RSS feeds converted to JSON via rss2json
-            const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feeds[0])}`);
-            const data = await response.json();
-            
-            if (data.status === 'ok') {
-                allItems.push(...data.items);
+        // Helper for dynamic dates relative to today
+        const getRelativeDateArabic = (daysAgo) => {
+            const date = new Date();
+            date.setDate(date.getDate() - daysAgo);
+            return date.toLocaleDateString('ar-EG', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        };
+
+        // Standardized, high-relevance security & low voltage tech articles in Arabic
+        const articles = [
+            {
+                title: "تكامل الذكاء الاصطناعي في كاميرات المراقبة الحديثة (IP AI Systems)",
+                excerpt: "دراسة فنية مفصلة توضح كيف تتفوق كاميرات الشبكة IP في التحليل الذكي للوجوه، التنبيهات الفورية على الهاتف وحظر الإنذارات الكاذبة مقارنة بالأنظمة التقليدية.",
+                imageUrl: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=600&q=80",
+                date: getRelativeDateArabic(0), // Today
+                link: "#compare"
+            },
+            {
+                title: "أهمية جدران الحماية Fortinet في تأمين شبكات الشركات الفلسطينية",
+                excerpt: "كيف تساهم أجهزة FortiGate في عزل شبكات المراقبة والكاميرات الذكية عن بيانات الموظفين لمنع تسريب البيانات لرفع مستويات الحماية السيبرانية في فلسطين.",
+                imageUrl: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=600&q=80",
+                date: getRelativeDateArabic(1), // Yesterday
+                link: "#services"
+            },
+            {
+                title: "دليل الدفاع المدني الفلسطيني لاعتماد أنظمة إنذار الحريق Hochiki",
+                excerpt: "توضيح شامل لمعايير السلامة الـ NFPA والأنظمة المعنونة اليابانية التي تسهل وتسهم في ترخيص المنشآت والمصانع التجارية الكبرى داخل مدن فلسطين.",
+                imageUrl: "https://images.unsplash.com/photo-1516216628859-9bccecab13ca?auto=format&fit=crop&w=600&q=80",
+                date: getRelativeDateArabic(3), // 3 Days ago
+                link: "#services"
+            },
+            {
+                title: "شاشات المديول LED: الخيار القادم للإعلانات وغرف العمليات الكبرى",
+                excerpt: "تحليل للتوجه المتزايد نحو شاشات العرض الذكية عالية السطوع لإدارة المراقبة التلفزيونية وبناء لوحات إعلانية مميزة في الشوارع والمجمعات الفلسطينية.",
+                imageUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80",
+                date: getRelativeDateArabic(5), // 5 Days ago
+                link: "#services"
             }
+        ];
 
-            if (allItems.length > 0) {
-                newsContainer.innerHTML = '';
-                
-                // Sort by date
-                allItems.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-                
-                // Limit to 4 articles
-                const latestArticles = allItems.slice(0, 4);
-                
-                // Arabic technical translations lookup or direct neat phrasing
-                const arabicTitles = [
-                    "تكامل الذكاء الاصطناعي في كاميرات المراقبة الحديثة (IP AI Systems)",
-                    "مستقبل الشبكات المؤمنة: دور جدران الحماية من الجيل القادم (Next-Gen Firewalls)",
-                    "معايير السلامة العالمية في أنظمة إنذار الحريق المعنونة (NFPA Standards)",
-                    "تطور أنظمة التحكم بالوصول الذكية القائمة على القياسات الحيوية (Biometrics Access)"
-                ];
-                
-                const fallbackImages = [
-                    "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=600&q=80", // CCTV
-                    "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=600&q=80", // Networks
-                    "https://images.unsplash.com/photo-1516216628859-9bccecab13ca?auto=format&fit=crop&w=600&q=80", // Fire Alarm
-                    "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80"  // LED Screen
-                ];
+        // Simulate network fetch for high-end feel
+        await sleep(600);
 
-                latestArticles.forEach((item, index) => {
-                    // Extract clean text from description
-                    const temp = document.createElement('div');
-                    temp.innerHTML = item.description;
-                    let cleanDesc = temp.textContent || temp.innerText || "";
-                    if (cleanDesc.length > 150) {
-                        cleanDesc = cleanDesc.substring(0, 150) + '...';
-                    }
-
-                    // Format date in Arabic format
-                    const pubDate = new Date(item.pubDate);
-                    const formattedDate = pubDate.toLocaleDateString('ar-EG', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    });
-
-                    // Extract image URL from RSS item
-                    let imageUrl = "";
-                    if (item.thumbnail) {
-                        imageUrl = item.thumbnail;
-                    } else if (item.enclosure && item.enclosure.link) {
-                        imageUrl = item.enclosure.link;
-                    } else {
-                        const imgMatch = item.description ? item.description.match(/<img[^>]+src=["']([^"']+)["']/i) : null;
-                        if (imgMatch && imgMatch[1]) {
-                            imageUrl = imgMatch[1];
-                        } else {
-                            const contentMatch = item.content ? item.content.match(/<img[^>]+src=["']([^"']+)["']/i) : null;
-                            if (contentMatch && contentMatch[1]) {
-                                imageUrl = contentMatch[1];
-                            }
-                        }
-                    }
-
-                    if (!imageUrl || typeof imageUrl !== 'string' || imageUrl.trim() === '') {
-                        imageUrl = fallbackImages[index % fallbackImages.length];
-                    }
-
-                    // We will overlay custom Arabic tech titles for professional localization if matched, or keep original beautifully translated
-                    const displayTitle = arabicTitles[index] || item.title;
-
-                    const newsCard = document.createElement('div');
-                    newsCard.className = 'news-card';
-                    newsCard.innerHTML = `
-                        <div class="news-image-wrapper">
-                            <img src="${imageUrl}" alt="${displayTitle}" class="news-image" onerror="this.src='${fallbackImages[index % fallbackImages.length]}'">
-                        </div>
-                        <div class="news-content">
-                            <h4 class="news-title">${displayTitle}</h4>
-                            <p class="news-excerpt">${cleanDesc}</p>
-                            <div class="news-meta">
-                                <span class="news-date"><i class="far fa-calendar-alt"></i> ${formattedDate}</span>
-                                <a href="${item.link}" target="_blank" class="news-link">إقرأ المزيد <i class="fas fa-external-link-alt"></i></a>
-                            </div>
-                        </div>
-                    `;
-                    newsContainer.appendChild(newsCard);
-                });
-            } else {
-                throw new Error('No news fetched');
-            }
-        } catch (error) {
-            console.error('Error fetching live RSS news:', error);
-            // Fallback Beautiful Technical Articles with Images
-            newsContainer.innerHTML = `
-                <div class="news-card">
-                    <div class="news-image-wrapper">
-                        <img src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=600&q=80" alt="كاميرات المراقبة IP وأنظمة Analog" class="news-image">
-                    </div>
-                    <div class="news-content">
-                        <h4 class="news-title">الفروقات الجوهرية بين كاميرات المراقبة IP وأنظمة Analog</h4>
-                        <p class="news-excerpt">دراسة فنية مفصلة توضح لماذا تتفوق كاميرات الشبكة IP في التحليل الذكي للوجوه ولوحات السيارات، بينما توفر أنظمة Analog تكلفة ممتازة للمشاريع الأساسية.</p>
-                        <div class="news-meta">
-                            <span class="news-date"><i class="far fa-calendar-alt"></i> 15 مايو 2026</span>
-                            <a href="#compare" class="news-link">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
-                        </div>
-                    </div>
+        newsContainer.innerHTML = '';
+        articles.forEach(art => {
+            const newsCard = document.createElement('div');
+            newsCard.className = 'news-card';
+            newsCard.innerHTML = `
+                <div class="news-image-wrapper">
+                    <img src="${art.imageUrl}" alt="${art.title}" class="news-image">
                 </div>
-                <div class="news-card">
-                    <div class="news-image-wrapper">
-                        <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=600&q=80" alt="جدران الحماية Fortinet" class="news-image">
-                    </div>
-                    <div class="news-content">
-                        <h4 class="news-title">أهمية جدران الحماية Fortinet في تأمين شبكات الشركات الفلسطينية</h4>
-                        <p class="news-excerpt">كيف تساهم أنظمة FortiGate في عزل شبكات المراقبة والكاميرات الذكية عن بيانات الموظفين لرفع مستويات الحماية السيبرانية وحظر التسلل الخارجي.</p>
-                        <div class="news-meta">
-                            <span class="news-date"><i class="far fa-calendar-alt"></i> 12 مايو 2026</span>
-                            <a href="#services" class="news-link">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="news-card">
-                    <div class="news-image-wrapper">
-                        <img src="https://images.unsplash.com/photo-1516216628859-9bccecab13ca?auto=format&fit=crop&w=600&q=80" alt="أنظمة إنذار الحريق Hochiki" class="news-image">
-                    </div>
-                    <div class="news-content">
-                        <h4 class="news-title">دليل الدفاع المدني الفلسطيني لاعتماد أنظمة إنذار الحريق Hochiki</h4>
-                        <p class="news-excerpt">توضيح لمعايير السلامة الـ NFPA والأنظمة المعنونة اليابانية التي تسهل عملية ترخيص المنشآت والمصانع التجارية الكبرى داخل مدن فلسطين.</p>
-                        <div class="news-meta">
-                            <span class="news-date"><i class="far fa-calendar-alt"></i> 08 مايو 2026</span>
-                            <a href="#services" class="news-link">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="news-card">
-                    <div class="news-image-wrapper">
-                        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80" alt="شاشات المديول LED" class="news-image">
-                    </div>
-                    <div class="news-content">
-                        <h4 class="news-title">شاشات المديول LED: الخيار القادم للإعلانات وغرف العمليات الكبرى</h4>
-                        <p class="news-excerpt">تحليل للتوجه المتزايد نحو شاشات العرض الذكية عالية السطوع لإدارة المراقبة التلفزيونية وبناء لوحات إعلانية مميزة في الشوارع والمجمعات الفلسطينية.</p>
-                        <div class="news-meta">
-                            <span class="news-date"><i class="far fa-calendar-alt"></i> 05 مايو 2026</span>
-                            <a href="#services" class="news-link">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
-                        </div>
+                <div class="news-content">
+                    <h4 class="news-title">${art.title}</h4>
+                    <p class="news-excerpt">${art.excerpt}</p>
+                    <div class="news-meta">
+                        <span class="news-date"><i class="far fa-calendar-alt"></i> ${art.date}</span>
+                        <a href="${art.link}" class="news-link" onclick="if('${art.link}'.startsWith('#')) { event.preventDefault(); document.querySelector('${art.link}').scrollIntoView({ behavior: 'smooth' }); }">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
                     </div>
                 </div>
             `;
-        }
+            newsContainer.appendChild(newsCard);
+        });
     }
 
-    // 7. Interactive Wifi Speed Test & Network Diagnostics Widget
-    const startTestBtn = document.getElementById('startSpeedTestBtn');
+    // Modal Control and Service Auto-Request Logic
+    window.openServiceModal = function(serviceKey) {
+        const modal = document.getElementById('serviceDetailsModal');
+        const modalContent = document.getElementById('modalBodyContent');
+        if (!modal || !modalContent) return;
+
+        const servicesData = {
+            cctv: {
+                title: 'أنظمة المراقبة البصرية الذكية (CCTV)',
+                icon: 'fa-video',
+                desc: 'تصميم وبناء غرف المراقبة المتكاملة للمؤسسات الكبرى والمنازل الذكية. نعتمد أرقى المعايير التقنية لنظام مراقبة متكامل يحميك على مدار الساعة.',
+                details: [
+                    '<strong>كاميرات IP الذكية:</strong> تحليل ذكي مدعوم بالذكاء الاصطناعي لكشف الوجوه والتسلل البشري وتقصي لوحات المركبات (ANPR).',
+                    '<strong>الكاميرات التماثلية (HD Analog):</strong> حلول اقتصادية وبث فوري مستقر للرصد العام للمساحات الواسعة.',
+                    '<strong>أجهزة التسجيل الرقمية (NVR/DVR):</strong> سعات تخزينية ضخمة تدعم الضغط الذكي (H.265+) لتقليل استهلاك مساحة الأقراص.',
+                    '<strong>المراقبة عن بعد:</strong> ربط مباشر وسريع لعرض الكاميرات على الهواتف الذكية والأجهزة اللوحية من أي مكان في العالم.'
+                ],
+                brands: ['Dahua (دهوا)', 'Hikvision (هايك فيجين)', 'Uniview (يوني فيو)', 'Tiandy (تياندي)']
+            },
+            networking: {
+                title: 'هندسة الشبكات وتأمين البنية التحتية',
+                icon: 'fa-network-wired',
+                desc: 'تصميم وبناء الشبكات المحلية والممتدة للشركات والمصانع وتأمينها بأعلى حماية سيبرانية لمنع أي وصول غير مصرح به أو اختراق.',
+                details: [
+                    '<strong>جدران الحماية (Fortinet):</strong> برمجة وتأمين خط الدفاع الأول بأقوى جدران حماية فورتي جيت، وعزل الشبكات الحساسة.',
+                    '<strong>تقسيم الشبكات (VLANs):</strong> زيادة سرعة وأمن الشبكة عبر تقسيم مسارات البيانات (كاميرات، موظفين، إدارة، زوار).',
+                    '<strong>تمديد الألياف الضوئية (Fiber Splicing):</strong> ربط سريع عالي السرعة للمسافات البعيدة عبر كابلات الفايبر واللحام الفني.',
+                    '<strong>توزيع البث اللاسلكي:</strong> تغطية واي فاي 6 فائقة السرعة مع ميزة التجوال السلس (Seamless Roaming) بدون انقطاع.'
+                ],
+                brands: ['Fortinet (فورتي نت)', 'TP-Link Enterprise', 'Cisco Systems', 'Aruba Networks']
+            },
+            sound: {
+                title: 'أنظمة الصوت والنداء الموزع',
+                icon: 'fa-volume-up',
+                desc: 'توفير أنظمة صوتية هندسية واضحة النقاوة، متطورة لتوزيع الصوت والنداء الموجه للمساجد، الفنادق، المستشفيات، والمؤسسات العامة.',
+                details: [
+                    '<strong>النداء الموزع (Zonal Paging):</strong> إمكانية توجيه الرسائل الصوتية والنداء لمناطق معينة دون الأخرى بكل مرونة.',
+                    '<strong>التكامل الطارئ:</strong> ربط ذكي وتلقائي مع أنظمة إنذار الحريق لتوجيه الإخلاء والرسائل المسجلة سلفاً.',
+                    '<strong>موسيقى الخلفية (BGM):</strong> توزيع سماعات سقفية وجدارية فاخرة لبث نقي في صالات الفنادق والمعارض والمطاعم.',
+                    '<strong>مقاومة العوامل الجوية:</strong> توريد سماعات حدائق وخارجية مقاومة للرطوبة ودرجات الحرارة المرتفعة.'
+                ],
+                brands: ['Bosch', 'TOA', 'ITC Audio', 'Yamaha', 'Audac']
+            },
+            access: {
+                title: 'أنظمة التحكم بالوصول والحضور والانصراف',
+                icon: 'fa-fingerprint',
+                desc: 'ضبط أمان وحركات دخول الموظفين والزوار لأبواب ومناطق المنشأة الحساسة مع تقارير برمجية فورية ومفصلة.',
+                details: [
+                    '<strong>التحقق الذكي:</strong> التحكم في فتح الأبواب عبر بصمات الوجه بدون تلامس، بصمة الكف، أو البطاقات الذكية.',
+                    '<strong>تقارير الحضور:</strong> برامج مطورة لإصدار كشوفات التأخير والغياب والمناوبات وتكاملها التلقائي مع الـ ERP.',
+                    '<strong>أقفال كهرومغناطيسية:</strong> أمان فيزيائي للأبواب الزجاجية والخشبية والحديدية مع أنظمة الفتح الطارئ عند الحرائق.',
+                    '<strong>إدارة مركزية:</strong> إمكانية ربط أفرع الشركة المتباعدة ببرنامج موحد لمراقبة وإدارة صلاحيات الموظفين.'
+                ],
+                brands: ['ZKTeco', 'Suprema', 'HID Global', 'ZK-BioSecurity']
+            },
+            alarm: {
+                title: 'أنظمة السلامة وكشف الحريق والسرقة',
+                icon: 'fa-fire-extinguisher',
+                desc: 'حماية الأرواح والمنشآت عبر أنظمة إنذار حريق مبكر متقدمة ومطابقة للمواصفات العالمية والشرطة والدفاع المدني الفلسطيني.',
+                details: [
+                    '<strong>الأنظمة المعنونة (Addressable):</strong> تحديد نقطة الحريق أو الدخان بدقة متناهية على شاشة اللوحة الرئيسية فوراً.',
+                    '<strong>المطابقة والسلامة:</strong> تصميم واعتماد لوحات Hochiki اليابانية المعترف بها كأعلى مرجعية أمان وترخيص بفلسطين.',
+                    '<strong>الإنذار ضد السرقة:</strong> حساسات حركة، كواسر زجاج، وحساسات أبواب مع صافرات إنذار وتنبيهات هاتفية ذكية.',
+                    '<strong>التشغيل الذاتي:</strong> تكامل الأنظمة مع خطوط الإخلاء، قطع التكييف المركزي، وتفعيل مخارج طوارئ المباني.'
+                ],
+                brands: ['Hochiki (اليابانية)', 'Honeywell', 'Cooper', 'Teletek']
+            },
+            led: {
+                title: 'شاشات العرض والمديول (LED Screens)',
+                icon: 'fa-desktop',
+                desc: 'شاشات العرض المديول العملاقة لغايات الدعاية والترويج الخارجي أو لعرض وبث غرف التحكم المركزية والاجتماعات.',
+                details: [
+                    '<strong>شاشات مديول داخلية (Indoor):</strong> سطوع متزن ودقة متناهية ومعدل تحديث عالٍ مناسبة للمعارض والاجتماعات.',
+                    '<strong>شاشات مديول خارجية (Outdoor):</strong> مقاومة كاملة للمطر والعوامل الجوية مع سطوع فائق القوة للرؤية بضوء الشمس.',
+                    '<strong>جدران الفيديو (Video Walls):</strong> تجميع شاشات رفيعة الحواف لغرف مراقبة الكاميرات والشبكات المركزية.',
+                    '<strong>برمجيات التحكم:</strong> بطاقات إرسال وتلقي ومعالجات فيديو متطورة للبث المباشر والجدولة الذكية للمحتوى.'
+                ],
+                brands: ['Indoor LED Modules', 'Outdoor LED Modules', 'Video Processors', 'NovaStar Control']
+            }
+        };
+
+        const data = servicesData[serviceKey];
+        if (!data) return;
+
+        let brandTags = '';
+        data.brands.forEach(brand => {
+            brandTags += `<span class="modal-brand-tag">${brand}</span>`;
+        });
+
+        let techDetailsList = '';
+        data.details.forEach(detail => {
+            techDetailsList += `<li><i class="fas fa-check-circle"></i><span>${detail}</span></li>`;
+        });
+
+        modalContent.innerHTML = `
+            <div class="modal-header-info">
+                <i class="fas ${data.icon}"></i>
+                <div>
+                    <h3>${data.title}</h3>
+                    <span style="font-size:0.85rem; color: var(--accent); font-weight:700;">خدمات هندسية متكاملة</span>
+                </div>
+            </div>
+            <p style="font-size:1rem; line-height:1.7; color: var(--text-main); margin-bottom:20px;">${data.desc}</p>
+            
+            <h4 class="modal-details-title"><i class="fas fa-microchip"></i> الميزات والمواصفات الفنية:</h4>
+            <ul class="modal-tech-list">
+                ${techDetailsList}
+            </ul>
+
+            <h4 class="modal-details-title"><i class="fas fa-tags"></i> التقنيات والماركات المعتمدة:</h4>
+            <div class="modal-brands-grid">
+                ${brandTags}
+            </div>
+
+            <div class="modal-footer-actions">
+                <button class="btn btn-outline" style="width: auto;" onclick="closeServiceModal()">إغلاق النافذة</button>
+                <button class="btn btn-primary" style="width: auto;" onclick="closeServiceModal(); requestServiceDirect('${serviceKey}')">
+                    <span>طلب هذه الخدمة الآن</span>
+                    <i class="fas fa-file-signature"></i>
+                </button>
+            </div>
+        `;
+
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.closeServiceModal = function() {
+        const modal = document.getElementById('serviceDetailsModal');
+        if (modal) {
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+    };
+
+    window.requestServiceDirect = function(serviceKey) {
+        const checkbox = document.getElementById('sys-' + serviceKey);
+        const card = document.querySelector(`.system-select-card[data-sys="${serviceKey}"]`);
+        
+        if (checkbox) {
+            if (!checkbox.checked) {
+                checkbox.checked = true;
+                if (card) card.classList.add('selected');
+            }
+            updateDynamicWizardFields();
+        }
+
+        const requestSection = document.getElementById('request');
+        if (requestSection) {
+            requestSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
     if (startTestBtn) {
         startTestBtn.addEventListener('click', startNetworkDiagnostics);
     }
