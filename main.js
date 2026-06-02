@@ -554,7 +554,7 @@ ${noteStr}
         newsContainer.innerHTML = `
             <div style="grid-column: span 2; text-align:center; padding:40px; color: var(--text-muted);">
                 <i class="fas fa-spinner fa-spin" style="font-size:2rem; color: var(--accent); margin-bottom:15px;"></i>
-                <p>جاري جلب آخر المستجدات الأمنية وتكنولوجيا الشبكات...</p>
+                <p>جاري سحب آخر الأخبار التقنية والأمنية مباشرة...</p>
             </div>
         `;
 
@@ -569,8 +569,7 @@ ${noteStr}
             });
         };
 
-        // Standardized, high-relevance security & low voltage tech articles in Arabic
-        const articles = [
+        const fallbackArticles = [
             {
                 title: "تكامل الذكاء الاصطناعي في كاميرات المراقبة الحديثة (IP AI Systems)",
                 excerpt: "دراسة فنية مفصلة توضح كيف تتفوق كاميرات الشبكة IP في التحليل الذكي للوجوه، التنبيهات الفورية على الهاتف وحظر الإنذارات الكاذبة مقارنة بالأنظمة التقليدية.",
@@ -601,28 +600,95 @@ ${noteStr}
             }
         ];
 
-        // Simulate network fetch for high-end feel
-        await sleep(600);
+        try {
+            // Fetch live tech news from the most active Arabic tech source: AITNews (البوابة العربية للأخبار التقنية)
+            const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://aitnews.com/feed/')}`);
+            const data = await response.json();
+            
+            if (data && data.status === 'ok' && data.items && data.items.length > 0) {
+                newsContainer.innerHTML = '';
+                
+                // Take the 4 latest Arabic articles
+                const latestItems = data.items.slice(0, 4);
+                
+                latestItems.forEach((item, index) => {
+                    // Clean descriptions from HTML tags
+                    const temp = document.createElement('div');
+                    temp.innerHTML = item.description;
+                    let cleanDesc = temp.textContent || temp.innerText || "";
+                    if (cleanDesc.length > 140) {
+                        cleanDesc = cleanDesc.substring(0, 140) + '...';
+                    }
 
-        newsContainer.innerHTML = '';
-        articles.forEach(art => {
-            const newsCard = document.createElement('div');
-            newsCard.className = 'news-card';
-            newsCard.innerHTML = `
-                <div class="news-image-wrapper">
-                    <img src="${art.imageUrl}" alt="${art.title}" class="news-image">
-                </div>
-                <div class="news-content">
-                    <h4 class="news-title">${art.title}</h4>
-                    <p class="news-excerpt">${art.excerpt}</p>
-                    <div class="news-meta">
-                        <span class="news-date"><i class="far fa-calendar-alt"></i> ${art.date}</span>
-                        <a href="#" class="news-link" onclick="event.preventDefault(); openServiceModal('${art.serviceKey}')">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
+                    // Format date beautifully
+                    const pubDate = new Date(item.pubDate);
+                    const formattedDate = pubDate.toLocaleDateString('ar-EG', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+
+                    // Determine article image URL
+                    let imageUrl = "";
+                    if (item.thumbnail) {
+                        imageUrl = item.thumbnail;
+                    } else if (item.enclosure && item.enclosure.link) {
+                        imageUrl = item.enclosure.link;
+                    } else {
+                        const imgMatch = item.description ? item.description.match(/<img[^>]+src=["']([^"']+)["']/i) : null;
+                        imageUrl = (imgMatch && imgMatch[1]) ? imgMatch[1] : `https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80`;
+                    }
+
+                    // Define which service modal to bind to (cctv, networking, alarm, access, led) for user interaction
+                    const serviceKeys = ['cctv', 'networking', 'alarm', 'led'];
+                    const mappedService = serviceKeys[index % serviceKeys.length];
+
+                    const newsCard = document.createElement('div');
+                    newsCard.className = 'news-card';
+                    newsCard.innerHTML = `
+                        <div class="news-image-wrapper">
+                            <img src="${imageUrl}" alt="${item.title}" class="news-image" onerror="this.src='https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80'">
+                        </div>
+                        <div class="news-content">
+                            <h4 class="news-title">${item.title}</h4>
+                            <p class="news-excerpt">${cleanDesc}</p>
+                            <div class="news-meta">
+                                <span class="news-date"><i class="far fa-calendar-alt"></i> ${formattedDate}</span>
+                                <div style="display: flex; gap: 10px;">
+                                    <a href="${item.link}" target="_blank" class="news-link" style="color: var(--text-muted);">المصدر <i class="fas fa-external-link-alt" style="font-size: 0.75rem;"></i></a>
+                                    <a href="#" class="news-link" onclick="event.preventDefault(); openServiceModal('${mappedService}')">التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    newsContainer.appendChild(newsCard);
+                });
+            } else {
+                throw new Error('Could not fetch AITNews feed');
+            }
+        } catch (error) {
+            console.warn('Live news fetch failed, showing dynamic Viron Tech articles instead:', error);
+            newsContainer.innerHTML = '';
+            
+            fallbackArticles.forEach(art => {
+                const newsCard = document.createElement('div');
+                newsCard.className = 'news-card';
+                newsCard.innerHTML = `
+                    <div class="news-image-wrapper">
+                        <img src="${art.imageUrl}" alt="${art.title}" class="news-image">
                     </div>
-                </div>
-            `;
-            newsContainer.appendChild(newsCard);
-        });
+                    <div class="news-content">
+                        <h4 class="news-title">${art.title}</h4>
+                        <p class="news-excerpt">${art.excerpt}</p>
+                        <div class="news-meta">
+                            <span class="news-date"><i class="far fa-calendar-alt"></i> ${art.date}</span>
+                            <a href="#" class="news-link" onclick="event.preventDefault(); openServiceModal('${art.serviceKey}')">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
+                        </div>
+                    </div>
+                `;
+                newsContainer.appendChild(newsCard);
+            });
+        }
     }
 
     // Modal Control and Service Auto-Request Logic
