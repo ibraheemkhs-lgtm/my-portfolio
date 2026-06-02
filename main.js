@@ -576,28 +576,28 @@ ${noteStr}
                 excerpt: "دراسة فنية مفصلة توضح كيف تتفوق كاميرات الشبكة IP في التحليل الذكي للوجوه، التنبيهات الفورية على الهاتف وحظر الإنذارات الكاذبة مقارنة بالأنظمة التقليدية.",
                 imageUrl: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=600&q=80",
                 date: getRelativeDateArabic(0), // Today
-                link: "#compare"
+                serviceKey: "cctv"
             },
             {
                 title: "أهمية جدران الحماية Fortinet في تأمين شبكات الشركات الفلسطينية",
                 excerpt: "كيف تساهم أجهزة FortiGate في عزل شبكات المراقبة والكاميرات الذكية عن بيانات الموظفين لمنع تسريب البيانات لرفع مستويات الحماية السيبرانية في فلسطين.",
                 imageUrl: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=600&q=80",
                 date: getRelativeDateArabic(1), // Yesterday
-                link: "#services"
+                serviceKey: "networking"
             },
             {
                 title: "دليل الدفاع المدني الفلسطيني لاعتماد أنظمة إنذار الحريق Hochiki",
                 excerpt: "توضيح شامل لمعايير السلامة الـ NFPA والأنظمة المعنونة اليابانية التي تسهل وتسهم في ترخيص المنشآت والمصانع التجارية الكبرى داخل مدن فلسطين.",
                 imageUrl: "https://images.unsplash.com/photo-1516216628859-9bccecab13ca?auto=format&fit=crop&w=600&q=80",
                 date: getRelativeDateArabic(3), // 3 Days ago
-                link: "#services"
+                serviceKey: "alarm"
             },
             {
                 title: "شاشات المديول LED: الخيار القادم للإعلانات وغرف العمليات الكبرى",
                 excerpt: "تحليل للتوجه المتزايد نحو شاشات العرض الذكية عالية السطوع لإدارة المراقبة التلفزيونية وبناء لوحات إعلانية مميزة في الشوارع والمجمعات الفلسطينية.",
                 imageUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80",
                 date: getRelativeDateArabic(5), // 5 Days ago
-                link: "#services"
+                serviceKey: "led"
             }
         ];
 
@@ -617,7 +617,7 @@ ${noteStr}
                     <p class="news-excerpt">${art.excerpt}</p>
                     <div class="news-meta">
                         <span class="news-date"><i class="far fa-calendar-alt"></i> ${art.date}</span>
-                        <a href="${art.link}" class="news-link" onclick="if('${art.link}'.startsWith('#')) { event.preventDefault(); document.querySelector('${art.link}').scrollIntoView({ behavior: 'smooth' }); }">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
+                        <a href="#" class="news-link" onclick="event.preventDefault(); openServiceModal('${art.serviceKey}')">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
                     </div>
                 </div>
             `;
