@@ -600,74 +600,117 @@ ${noteStr}
             }
         ];
 
+        let newsFetched = false;
+        let latestItems = [];
+
         try {
-            // Fetch live tech news from the most active Arabic tech source: AITNews (البوابة العربية للأخبار التقنية)
+            // Method A: Fetch live tech news from rss2json
             const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent('https://aitnews.com/feed/')}`);
             const data = await response.json();
-            
             if (data && data.status === 'ok' && data.items && data.items.length > 0) {
-                newsContainer.innerHTML = '';
-                
-                // Take the 4 latest Arabic articles
-                const latestItems = data.items.slice(0, 4);
-                
-                latestItems.forEach((item, index) => {
-                    // Clean descriptions from HTML tags
-                    const temp = document.createElement('div');
-                    temp.innerHTML = item.description;
-                    let cleanDesc = temp.textContent || temp.innerText || "";
-                    if (cleanDesc.length > 140) {
-                        cleanDesc = cleanDesc.substring(0, 140) + '...';
-                    }
+                latestItems = data.items.slice(0, 4);
+                newsFetched = true;
+            }
+        } catch (e) {
+            console.warn('rss2json failed, trying AllOrigins CORS proxy...', e);
+        }
 
-                    // Format date beautifully
-                    const pubDate = new Date(item.pubDate);
-                    const formattedDate = pubDate.toLocaleDateString('ar-EG', {
+        if (!newsFetched) {
+            try {
+                // Method B: Fetch via AllOrigins CORS Proxy and parse RSS XML
+                const proxyResponse = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://aitnews.com/feed/')}`);
+                const proxyData = await proxyResponse.json();
+                if (proxyData && proxyData.contents) {
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(proxyData.contents, "text/xml");
+                    const items = xmlDoc.querySelectorAll("item");
+                    if (items && items.length > 0) {
+                        const limit = Math.min(items.length, 4);
+                        for (let i = 0; i < limit; i++) {
+                            const item = items[i];
+                            const title = item.querySelector("title")?.textContent || "";
+                            const link = item.querySelector("link")?.textContent || "";
+                            const pubDate = item.querySelector("pubDate")?.textContent || "";
+                            const descriptionHtml = item.querySelector("description")?.textContent || "";
+                            
+                            // Clean description html
+                            const tempDiv = document.createElement("div");
+                            tempDiv.innerHTML = descriptionHtml;
+                            const cleanDesc = tempDiv.textContent || tempDiv.innerText || "";
+                            
+                            // Image match
+                            let imageUrl = "";
+                            const imgMatch = descriptionHtml.match(/<img[^>]+src=["']([^"']+)["']/i);
+                            if (imgMatch && imgMatch[1]) {
+                                imageUrl = imgMatch[1];
+                            }
+
+                            latestItems.push({
+                                title: title,
+                                link: link,
+                                pubDate: pubDate,
+                                description: cleanDesc,
+                                thumbnail: imageUrl
+                            });
+                        }
+                        if (latestItems.length > 0) {
+                            newsFetched = true;
+                        }
+                    }
+                }
+            } catch (e2) {
+                console.warn('AllOrigins proxy failed as well, showing custom fallback articles...', e2);
+            }
+        }
+
+        if (newsFetched && latestItems.length > 0) {
+            newsContainer.innerHTML = '';
+            latestItems.forEach((item, index) => {
+                let cleanDesc = item.description || "";
+                if (cleanDesc.length > 140) {
+                    cleanDesc = cleanDesc.substring(0, 140) + '...';
+                }
+
+                // Format date beautifully
+                const pubDate = new Date(item.pubDate);
+                let formattedDate = "";
+                if (!isNaN(pubDate)) {
+                    formattedDate = pubDate.toLocaleDateString('ar-EG', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric'
                     });
+                } else {
+                    formattedDate = item.pubDate;
+                }
 
-                    // Determine article image URL
-                    let imageUrl = "";
-                    if (item.thumbnail) {
-                        imageUrl = item.thumbnail;
-                    } else if (item.enclosure && item.enclosure.link) {
-                        imageUrl = item.enclosure.link;
-                    } else {
-                        const imgMatch = item.description ? item.description.match(/<img[^>]+src=["']([^"']+)["']/i) : null;
-                        imageUrl = (imgMatch && imgMatch[1]) ? imgMatch[1] : `https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80`;
-                    }
+                let imageUrl = item.thumbnail || `https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80`;
 
-                    // Define which service modal to bind to (cctv, networking, alarm, access, led) for user interaction
-                    const serviceKeys = ['cctv', 'networking', 'alarm', 'led'];
-                    const mappedService = serviceKeys[index % serviceKeys.length];
+                const serviceKeys = ['cctv', 'networking', 'alarm', 'led'];
+                const mappedService = serviceKeys[index % serviceKeys.length];
 
-                    const newsCard = document.createElement('div');
-                    newsCard.className = 'news-card';
-                    newsCard.innerHTML = `
-                        <div class="news-image-wrapper">
-                            <img src="${imageUrl}" alt="${item.title}" class="news-image" onerror="this.src='https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80'">
-                        </div>
-                        <div class="news-content">
-                            <h4 class="news-title">${item.title}</h4>
-                            <p class="news-excerpt">${cleanDesc}</p>
-                            <div class="news-meta">
-                                <span class="news-date"><i class="far fa-calendar-alt"></i> ${formattedDate}</span>
-                                <div style="display: flex; gap: 10px;">
-                                    <a href="${item.link}" target="_blank" class="news-link" style="color: var(--text-muted);">المصدر <i class="fas fa-external-link-alt" style="font-size: 0.75rem;"></i></a>
-                                    <a href="#" class="news-link" onclick="event.preventDefault(); openServiceModal('${mappedService}')">التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
-                                </div>
+                const newsCard = document.createElement('div');
+                newsCard.className = 'news-card';
+                newsCard.innerHTML = `
+                    <div class="news-image-wrapper">
+                        <img src="${imageUrl}" alt="${item.title}" class="news-image" onerror="this.src='https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80'">
+                    </div>
+                    <div class="news-content">
+                        <h4 class="news-title">${item.title}</h4>
+                        <p class="news-excerpt">${cleanDesc}</p>
+                        <div class="news-meta">
+                            <span class="news-date"><i class="far fa-calendar-alt"></i> ${formattedDate}</span>
+                            <div style="display: flex; gap: 10px;">
+                                <a href="${item.link}" target="_blank" class="news-link" style="color: var(--text-muted);">المصدر <i class="fas fa-external-link-alt" style="font-size: 0.75rem;"></i></a>
+                                <a href="#" class="news-link" onclick="event.preventDefault(); openServiceModal('${mappedService}')">التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
                             </div>
                         </div>
-                    `;
-                    newsContainer.appendChild(newsCard);
-                });
-            } else {
-                throw new Error('Could not fetch AITNews feed');
-            }
-        } catch (error) {
-            console.warn('Live news fetch failed, showing dynamic Viron Tech articles instead:', error);
+                    </div>
+                `;
+                newsContainer.appendChild(newsCard);
+            });
+        } else {
+            console.warn('Live news fetch failed, showing dynamic Viron Tech articles instead');
             newsContainer.innerHTML = '';
             
             fallbackArticles.forEach(art => {
