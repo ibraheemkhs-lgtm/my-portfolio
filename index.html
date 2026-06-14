@@ -1,15 +1,38 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="فيرون تكنولوجي (VIRON TECH) - شريككم الهندسي المعتمد والموثوق لأنظمة الجهد المنخفض والشبكات والأنظمة الأمنية المتكاملة في فلسطين. حلول متطورة وحماية ذكية.">
+    <meta name="description"
+        content="فيرون تكنولوجي (VIRON TECH) - شريككم الهندسي المعتمد والموثوق لأنظمة الجهد المنخفض والشبكات والأنظمة الأمنية المتكاملة في فلسطين. حلول متطورة وحماية ذكية.">
+
+    <!-- Open Graph / Facebook / WhatsApp Previews -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="VIRON TECH | فيرون للأنظمة المتكاملة والجهد المنخفض">
+    <meta property="og:description"
+        content="شريككم الهندسي المعتمد والموثوق لأنظمة الجهد المنخفض والشبكات والأنظمة الأمنية المتكاملة في فلسطين. حلول متطورة وحماية ذكية.">
+    <meta property="og:image" content="https://virontech.ps/ip-camera.webp">
+    <meta property="og:url" content="https://virontech.ps">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="letter-v-svgrepo-com.svg">
+
     <title>VIRON TECH | فيرون للأنظمة المتكاملة والجهد المنخفض</title>
-    
+
+    <!-- Google Fonts - Cairo & Tajawal -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Tajawal:wght@300;400;500;700;800;900&display=swap"
+        rel="stylesheet">
+
     <!-- External Stylesheets & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
     <!-- --- FLOATING ACTIONS --- -->
@@ -28,9 +51,10 @@
             <nav class="navbar">
                 <a href="#" class="logo">
                     <div class="logo-icon">V</div>
-                    <span class="logo-text">VIRON <span style="font-weight: 400; font-size: 1.1rem; color: var(--accent);">TECH</span></span>
+                    <span class="logo-text">VIRON <span
+                            style="font-weight: 400; font-size: 1.1rem; color: var(--accent);">TECH</span></span>
                 </a>
-                
+
                 <ul class="nav-menu">
                     <li class="nav-item active"><a href="#">الرئيسية</a></li>
                     <li class="nav-item"><a href="#services">خدماتنا</a></li>
@@ -67,8 +91,10 @@
                         <span>الريادة الفلسطينية في الأنظمة المتكاملة</span>
                     </div>
                     <h1>شريككم الهندسي لأنظمة <span>الجهد المنخفض</span> والشبكات</h1>
-                    <p class="hero-subtitle">نحن في <strong>VIRON TECH</strong> لا نقوم بتركيب الأجهزة الفردية، بل نصمم حلولاً هندسية متكاملة لربط وحماية أعمالك وممتلكاتك بأحدث التقنيات العالمية المطابقة لأعلى المعايير.</p>
-                    
+                    <p class="hero-subtitle">نحن في <strong>VIRON TECH</strong> لا نقوم بتركيب الأجهزة الفردية، بل نصمم
+                        حلولاً هندسية متكاملة لربط وحماية أعمالك وممتلكاتك بأحدث التقنيات العالمية المطابقة لأعلى
+                        المعايير.</p>
+
                     <div class="hero-buttons">
                         <a href="#request" class="btn-primary">
                             <span>ابدأ تصميم نظامك</span>
@@ -150,6 +176,7 @@
             </div>
 
             <div class="speed-test-wrapper">
+                <!-- Speed Test Card -->
                 <div class="speed-test-card">
                     <!-- Gauge Container -->
                     <div class="gauge-outer">
@@ -162,6 +189,7 @@
                         </div>
                         <div class="gauge-needle-wrapper">
                             <div class="gauge-needle" id="gaugeNeedle"></div>
+                            <div class="gauge-center-pin"></div>
                         </div>
                     </div>
 
@@ -187,23 +215,39 @@
                         </div>
                     </div>
 
-                    <!-- Action Button -->
-                    <button class="btn btn-primary" id="startSpeedTestBtn" style="width: 100%; margin-top: 20px; justify-content: center; gap: 10px;">
-                        <i class="fas fa-play"></i> ابدأ الفحص الآن
+                    <!-- Start Button -->
+                    <button id="startSpeedTestBtn" class="btn-primary" style="margin-top: 20px; width: 100%; justify-content: center;">
+                        <i class="fas fa-play" style="margin-left: 8px;"></i>
+                        <span>ابدأ فحص الشبكة</span>
                     </button>
                 </div>
 
-                <!-- Results and Solutions Box -->
-                <div class="solutions-card" id="solutionsCard" style="display: none;">
+                <!-- Solutions Card -->
+                <div class="solutions-card" id="solutionsCard">
+                    <!-- Solutions Card Header -->
                     <div class="solutions-header">
-                        <div class="status-badge" id="networkStatusBadge">تحليل الشبكة</div>
-                        <h3 id="solutionsTitle" style="font-size: 1.25rem; font-weight: 700; color: var(--text-main); margin: 0;">نتائج الفحص والتشخيص الذكي</h3>
+                        <span class="status-badge" id="networkStatusBadge" style="display: inline-block;">بانتظار الفحص...</span>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; margin: 0; color: var(--text-main);">نتائج التشخيص الذكي</h3>
                     </div>
-                    <div class="solutions-body">
+
+                    <!-- Solutions Placeholder -->
+                    <div id="solutionsPlaceholder">
+                        <p style="font-size: 0.95rem; line-height: 1.7; color: var(--text-muted); margin-bottom: 20px;">
+                            اختبر جودة وسرعة اتصالك بالإنترنت الآن لتقييم كفاءة بنية شبكتك التحتية. سيوفر لك نظام التشخيص الذكي فور انتهاء الفحص تحليلاً مفصلاً وحلولاً مقترحة لتحسين أداء كاميرات المراقبة وتغطية الواي فاي.
+                        </p>
+                        <div style="text-align: center; padding: 25px 15px; border: 2px dashed var(--border-color); border-radius: 16px; background: rgba(255, 255, 255, 0.01);">
+                            <i class="fas fa-network-wired fa-2x" style="margin-bottom: 12px; color: var(--accent); opacity: 0.7;"></i>
+                            <p style="font-size: 0.9rem; font-weight: 600; color: var(--text-main); margin-bottom: 5px;">أداة المعاينة الفورية</p>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">يرجى النقر على زر "ابدأ فحص الشبكة" لبدء تحليل جودة الاتصال</p>
+                        </div>
+                    </div>
+
+                    <!-- Solutions Result Body -->
+                    <div id="solutionsResultBody" style="display: none;">
                         <p class="solutions-intro" id="solutionsIntro" style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 20px;"></p>
-                        
+
                         <div class="solutions-list-wrapper">
-                            <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; color: var(--text-main);">📋 الحلول والتحسينات المقترحة لشبكتك:</h4>
+                            <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 12px; color: var(--text-main);"><i class="fas fa-clipboard-list" style="margin-left: 8px; color: var(--accent);"></i> الحلول والتحسينات المقترحة لشبكتك:</h4>
                             <ul class="solutions-list" id="solutionsList">
                                 <!-- Populated dynamically -->
                             </ul>
@@ -227,7 +271,8 @@
             <div class="section-header">
                 <span class="section-badge">خدماتنا الهندسية التخصصية</span>
                 <h2 class="section-title">أنظمة الجهد المنخفض المتكاملة (Extra-Low Voltage)</h2>
-                <p class="section-desc">نوفر باقة شاملة من خدمات التوريد، التصميم، البرمجة، والتشغيل النهائي لبيئات عمل ومنازل ذكية متكاملة الترابط.</p>
+                <p class="section-desc">نوفر باقة شاملة من خدمات التوريد، التصميم، البرمجة، والتشغيل النهائي لبيئات عمل
+                    ومنازل ذكية متكاملة الترابط.</p>
             </div>
 
             <div class="services-grid">
@@ -237,7 +282,9 @@
                         <i class="fas fa-video"></i>
                     </div>
                     <h3 class="service-title">أنظمة المراقبة البصرية الذكية (CCTV)</h3>
-                    <p class="service-desc">تصميم وبناء غرف مراقبة وتوريد كاميرات فائقة الجودة. نغطي كافة الفروقات بين أنظمة Analog عالية الدقة (HD) وأنظمة IP الشبكية المتطورة المدعومة بالذكاء الاصطناعي لكشف التسلل والتعرف التلقائي على الوجوه ولوحات المركبات.</p>
+                    <p class="service-desc">تصميم وبناء غرف مراقبة وتوريد كاميرات فائقة الجودة. نغطي كافة الفروقات بين
+                        أنظمة Analog عالية الدقة (HD) وأنظمة IP الشبكية المتطورة المدعومة بالذكاء الاصطناعي لكشف التسلل
+                        والتعرف التلقائي على الوجوه ولوحات المركبات.</p>
                     <div class="service-brands">
                         <span>الشركاء والماركات العالمية:</span>
                         <div class="brand-tags-container">
@@ -265,7 +312,9 @@
                         <i class="fas fa-network-wired"></i>
                     </div>
                     <h3 class="service-title">هندسة الشبكات وتأمين البنية التحتية</h3>
-                    <p class="service-desc">تأسيس شبكات الحاسوب الداخلية والخارجية، تمديد الألياف الضوئية (Fiber Splicing)، برمجة تقسيم الشبكات (VLANs)، وتأمين البيانات بجدران حماية ضد الاختراقات، بالإضافة للربط اللاسلكي بعيد المدى (Point-to-Point) للمواقع البعيدة.</p>
+                    <p class="service-desc">تأسيس شبكات الحاسوب الداخلية والخارجية، تمديد الألياف الضوئية (Fiber
+                        Splicing)، برمجة تقسيم الشبكات (VLANs)، وتأمين البيانات بجدران حماية ضد الاختراقات، بالإضافة
+                        للربط اللاسلكي بعيد المدى (Point-to-Point) للمواقع البعيدة.</p>
                     <div class="service-brands">
                         <span>الشركاء والماركات العالمية:</span>
                         <div class="brand-tags-container">
@@ -293,7 +342,9 @@
                         <i class="fas fa-volume-up"></i>
                     </div>
                     <h3 class="service-title">أنظمة الصوت والنداء الموزع</h3>
-                    <p class="service-desc">حلول الأنظمة الصوتية المتقدمة للشركات، الفنادق، المستشفيات، والمساجد في فلسطين. تشمل نداء المناطق الموزع (Zonal Paging)، وموسيقى الخلفية المريحة (Background Music)، وتكامل النظام الصوتي مع البدالة والإنذار لتوجيه الإخلاء.</p>
+                    <p class="service-desc">حلول الأنظمة الصوتية المتقدمة للشركات، الفنادق، المستشفيات، والمساجد في
+                        فلسطين. تشمل نداء المناطق الموزع (Zonal Paging)، وموسيقى الخلفية المريحة (Background Music)،
+                        وتكامل النظام الصوتي مع البدالة والإنذار لتوجيه الإخلاء.</p>
                     <div class="service-brands">
                         <span>الماركات المتوفرة في فلسطين:</span>
                         <div class="brand-tags-container">
@@ -322,7 +373,9 @@
                         <i class="fas fa-fingerprint"></i>
                     </div>
                     <h3 class="service-title">أنظمة التحكم بالوصول والحضور والانصراف</h3>
-                    <p class="service-desc">إدارة حركات الدخول والخروج للأبواب والمناطق الحساسة وغرف الخوادم عبر بصمات الكف، الوجه بدون تلامس، والبطاقات الذكية. ربط كامل وتكامل برمجي مع أنظمة الموارد البشرية (HR) والـ ERP لإصدار تقارير الحضور والغياب المؤتمتة.</p>
+                    <p class="service-desc">إدارة حركات الدخول والخروج للأبواب والمناطق الحساسة وغرف الخوادم عبر بصمات
+                        الكف، الوجه بدون تلامس، والبطاقات الذكية. ربط كامل وتكامل برمجي مع أنظمة الموارد البشرية (HR)
+                        والـ ERP لإصدار تقارير الحضور والغياب المؤتمتة.</p>
                     <div class="service-brands">
                         <span>أقوى الماركات والبرمجيات:</span>
                         <div class="brand-tags-container">
@@ -350,7 +403,9 @@
                         <i class="fas fa-fire-extinguisher"></i>
                     </div>
                     <h3 class="service-title">أنظمة السلامة وكشف الحريق والسرقة</h3>
-                    <p class="service-desc">تصميم أنظمة الإنذار المبكر الذكية المعنونة والتقليدية المطابقة لاشتراطات الدفاع المدني الفلسطيني. دمج الحساسات الحرارية والدخانية وكواسر الزجاج وربطها تلقائياً مع نظام النداء والإخلاء الصوتي لضمان أمان تام للمنشآت.</p>
+                    <p class="service-desc">تصميم أنظمة الإنذار المبكر الذكية المعنونة والتقليدية المطابقة لاشتراطات
+                        الدفاع المدني الفلسطيني. دمج الحساسات الحرارية والدخانية وكواسر الزجاج وربطها تلقائياً مع نظام
+                        النداء والإخلاء الصوتي لضمان أمان تام للمنشآت.</p>
                     <div class="service-brands">
                         <span>أقوى الشركات المعتمدة:</span>
                         <div class="brand-tags-container">
@@ -378,7 +433,9 @@
                         <i class="fas fa-desktop"></i>
                     </div>
                     <h3 class="service-title">شاشات العرض والمديول (LED Screens)</h3>
-                    <p class="service-desc">تركيب شاشات مديول LED العملاقة الخارجية والداخلية للإعلانات التجارية والمؤتمرات، وتصميم جدران الفيديو المتكاملة (Video Walls) لغرف المراقبة والتحكم بالشبكات والشركات بدقة ووضوح سطوع استثنائيين.</p>
+                    <p class="service-desc">تركيب شاشات مديول LED العملاقة الخارجية والداخلية للإعلانات التجارية
+                        والمؤتمرات، وتصميم جدران الفيديو المتكاملة (Video Walls) لغرف المراقبة والتحكم بالشبكات والشركات
+                        بدقة ووضوح سطوع استثنائيين.</p>
                     <div class="service-brands">
                         <span>تفاصيل التكنولوجيا:</span>
                         <div class="brand-tags-container">
@@ -408,7 +465,8 @@
             <div class="section-header">
                 <span class="section-badge">مقارنة تقنية تفاعلية</span>
                 <h2 class="section-title">المستشار الهندسي لمساعدتك في الاختيار</h2>
-                <p class="section-desc">اختر الموضوع للتعرف على الفروقات الجوهرية والتقنيات المناسبة لحجم ونطاق منشأتك.</p>
+                <p class="section-desc">اختر الموضوع للتعرف على الفروقات الجوهرية والتقنيات المناسبة لحجم ونطاق منشأتك.
+                </p>
             </div>
 
             <div class="compare-container">
@@ -431,14 +489,20 @@
                                 <i class="fas fa-circle-nodes"></i>
                                 <div>
                                     <h4>أنظمة الكاميرات الشبكية (IP Systems)</h4>
-                                    <span style="font-size:0.8rem; color: var(--accent); font-weight:700;">الخيار الذكي والحديث</span>
+                                    <span style="font-size:0.8rem; color: var(--accent); font-weight:700;">الخيار الذكي
+                                        والحديث</span>
                                 </div>
                             </div>
                             <ul class="compare-features-list">
-                                <li><i class="fas fa-check-circle"></i><span><strong>ذكاء اصطناعي مدمج (AI):</strong> كشف التسلل البشري وتنبيهات فورية على الجوال وحظر الإنذارات الكاذبة.</span></li>
-                                <li><i class="fas fa-check-circle"></i><span><strong>سهولة التمديد:</strong> تعمل بكابل إيثرنت واحد (PoE) ينقل البيانات والكهرباء معاً دون كابلات إضافية.</span></li>
-                                <li><i class="fas fa-check-circle"></i><span><strong>دقة غير محدودة:</strong> إمكانية الوصول لدقة 4K فائقة ووضوح بصري استثنائي للوجوه ولوحات السيارات.</span></li>
-                                <li><i class="fas fa-check-circle"></i><span><strong>مرونة التوسع:</strong> سهولة إضافة كاميرات جديدة للشبكة الحالية دون الحاجة لتمديد كابلات منفصلة للمسجل الرئيسي.</span></li>
+                                <li><i class="fas fa-check-circle"></i><span><strong>ذكاء اصطناعي مدمج (AI):</strong>
+                                        كشف التسلل البشري وتنبيهات فورية على الجوال وحظر الإنذارات الكاذبة.</span></li>
+                                <li><i class="fas fa-check-circle"></i><span><strong>سهولة التمديد:</strong> تعمل بكابل
+                                        إيثرنت واحد (PoE) ينقل البيانات والكهرباء معاً دون كابلات إضافية.</span></li>
+                                <li><i class="fas fa-check-circle"></i><span><strong>دقة غير محدودة:</strong> إمكانية
+                                        الوصول لدقة 4K فائقة ووضوح بصري استثنائي للوجوه ولوحات السيارات.</span></li>
+                                <li><i class="fas fa-check-circle"></i><span><strong>مرونة التوسع:</strong> سهولة إضافة
+                                        كاميرات جديدة للشبكة الحالية دون الحاجة لتمديد كابلات منفصلة للمسجل
+                                        الرئيسي.</span></li>
                             </ul>
                         </div>
 
@@ -447,14 +511,21 @@
                                 <i class="fas fa-cable-car" style="transform: rotate(90deg);"></i>
                                 <div>
                                     <h4>أنظمة الكاميرات التماثلية (Analog HD)</h4>
-                                    <span style="font-size:0.8rem; color: var(--secondary); font-weight:700;">الخيار الاقتصادي المستقر</span>
+                                    <span style="font-size:0.8rem; color: var(--secondary); font-weight:700;">الخيار
+                                        الاقتصادي المستقر</span>
                                 </div>
                             </div>
                             <ul class="compare-features-list red-list">
-                                <li><i class="fas fa-check-circle"></i><span><strong>تكلفة منخفضة:</strong> سعر الكاميرات والمسجل (DVR) أقل ومثالية للميزانيات المحدودة.</span></li>
-                                <li><i class="fas fa-check-circle"></i><span><strong>استقرار كامل للإشارة:</strong> نقل فوري ومباشر للفيديو دون أي تأخير أو استهلاك من عرض نطاق الشبكة الداخلي.</span></li>
-                                <li><i class="fas fa-check-circle"></i><span><strong>كابلات تمديد مخصصة:</strong> تتطلب كابل كوكسيال (RG59) منفصل بالإضافة لكابل طاقة لكل كاميرا.</span></li>
-                                <li><i class="fas fa-check-circle"></i><span><strong>ذكاء محدود:</strong> تعتمد على معالجة مسجل الفيديو DVR وغالباً ما تفتقر للتحليلات المتقدمة على مستوى الكاميرا نفسها.</span></li>
+                                <li><i class="fas fa-check-circle"></i><span><strong>تكلفة منخفضة:</strong> سعر
+                                        الكاميرات والمسجل (DVR) أقل ومثالية للميزانيات المحدودة.</span></li>
+                                <li><i class="fas fa-check-circle"></i><span><strong>استقرار كامل للإشارة:</strong> نقل
+                                        فوري ومباشر للفيديو دون أي تأخير أو استهلاك من عرض نطاق الشبكة الداخلي.</span>
+                                </li>
+                                <li><i class="fas fa-check-circle"></i><span><strong>كابلات تمديد مخصصة:</strong> تتطلب
+                                        كابل كوكسيال (RG59) منفصل بالإضافة لكابل طاقة لكل كاميرا.</span></li>
+                                <li><i class="fas fa-check-circle"></i><span><strong>ذكاء محدود:</strong> تعتمد على
+                                        معالجة مسجل الفيديو DVR وغالباً ما تفتقر للتحليلات المتقدمة على مستوى الكاميرا
+                                        نفسها.</span></li>
                             </ul>
                         </div>
                     </div>
@@ -468,16 +539,23 @@
                                 <i class="fas fa-shield-halved"></i>
                                 <div>
                                     <h4>جدران الحماية والأمان السيبراني (Fortinet)</h4>
-                                    <span style="font-size:0.8rem; color: var(--accent); font-weight:700;">درع الحماية الأول لمؤسستك</span>
+                                    <span style="font-size:0.8rem; color: var(--accent); font-weight:700;">درع الحماية
+                                        الأول لمؤسستك</span>
                                 </div>
                             </div>
                             <p style="font-size:0.95rem; color:var(--text-muted); margin-bottom:20px; line-height:1.7;">
-                                نعتمد برمجة وتثبيت أجهزة <strong>FortiGate</strong> لضمان حماية الطبقة السابعة في الشركات. نقوم بتطبيق جدار ناري يمنع التسلل الخارجي، وتفعيل الـ VPN الآمن للعمل عن بعد، وحظر المواقع غير المرغوبة للموظفين، وتفتيش البيانات المشفرة لمنع تسريب المعلومات الحساسة.
+                                نعتمد برمجة وتثبيت أجهزة <strong>FortiGate</strong> لضمان حماية الطبقة السابعة في
+                                الشركات. نقوم بتطبيق جدار ناري يمنع التسلل الخارجي، وتفعيل الـ VPN الآمن للعمل عن بعد،
+                                وحظر المواقع غير المرغوبة للموظفين، وتفتيش البيانات المشفرة لمنع تسريب المعلومات
+                                الحساسة.
                             </p>
                             <ul class="compare-features-list">
-                                <li><i class="fas fa-check-circle"></i><span>عزل تام لشبكة كاميرات المراقبة لتجنب اختراقها.</span></li>
-                                <li><i class="fas fa-check-circle"></i><span>التحكم في سرعات استهلاك الإنترنت وتوزيعها بعدل.</span></li>
-                                <li><i class="fas fa-check-circle"></i><span>حماية الأجهزة الداخلية من البرمجيات الخبيثة.</span></li>
+                                <li><i class="fas fa-check-circle"></i><span>عزل تام لشبكة كاميرات المراقبة لتجنب
+                                        اختراقها.</span></li>
+                                <li><i class="fas fa-check-circle"></i><span>التحكم في سرعات استهلاك الإنترنت وتوزيعها
+                                        بعدل.</span></li>
+                                <li><i class="fas fa-check-circle"></i><span>حماية الأجهزة الداخلية من البرمجيات
+                                        الخبيثة.</span></li>
                             </ul>
                         </div>
 
@@ -486,16 +564,23 @@
                                 <i class="fas fa-route"></i>
                                 <div>
                                     <h4>توزيع وتوسعة الواي فاي (Cisco & Aruba)</h4>
-                                    <span style="font-size:0.8rem; color: var(--secondary); font-weight:700;">بث فائق السرعة وتغطية بلا انقطاع</span>
+                                    <span style="font-size:0.8rem; color: var(--secondary); font-weight:700;">بث فائق
+                                        السرعة وتغطية بلا انقطاع</span>
                                 </div>
                             </div>
                             <p style="font-size:0.95rem; color:var(--text-muted); margin-bottom:20px; line-height:1.7;">
-                                نصمم توزيع نقاط البث (Access Points) من شركتي <strong>Aruba</strong> و <strong>TP-Link Enterprise</strong> لضمان تغطية كاملة بدون زوايا ميتة. ندعم التجوال السلس (Seamless Roaming) بحيث يتنقل هاتفك بين الطوابق والزوايا بدون انقطاع الإشارة أو التبديل اليدوي، مع عزل شبكة الزوار عن الموظفين.
+                                نصمم توزيع نقاط البث (Access Points) من شركتي <strong>Aruba</strong> و <strong>TP-Link
+                                    Enterprise</strong> لضمان تغطية كاملة بدون زوايا ميتة. ندعم التجوال السلس (Seamless
+                                Roaming) بحيث يتنقل هاتفك بين الطوابق والزوايا بدون انقطاع الإشارة أو التبديل اليدوي، مع
+                                عزل شبكة الزوار عن الموظفين.
                             </p>
                             <ul class="compare-features-list red-list">
-                                <li><i class="fas fa-check-circle"></i><span>تجوال ذكي سلس بدون انقطاع مكالمات الفيديو.</span></li>
-                                <li><i class="fas fa-check-circle"></i><span>دعم معايير WiFi 6 الحديثة للسرعة العالية للمستخدمين.</span></li>
-                                <li><i class="fas fa-check-circle"></i><span>لوحة إدارة سحابية مركزية لمراقبة استقرار التغطية.</span></li>
+                                <li><i class="fas fa-check-circle"></i><span>تجوال ذكي سلس بدون انقطاع مكالمات
+                                        الفيديو.</span></li>
+                                <li><i class="fas fa-check-circle"></i><span>دعم معايير WiFi 6 الحديثة للسرعة العالية
+                                        للمستخدمين.</span></li>
+                                <li><i class="fas fa-check-circle"></i><span>لوحة إدارة سحابية مركزية لمراقبة استقرار
+                                        التغطية.</span></li>
                             </ul>
                         </div>
                     </div>
@@ -510,7 +595,8 @@
             <div class="section-header">
                 <span class="section-badge">باقات الأسعار التقريبية</span>
                 <h2 class="section-title">اختر المستوى التكنولوجي الذي يناسبك</h2>
-                <p class="section-desc">نوفر تقديرات أولية تقريبية للحلول المتكاملة لتسهيل دراسة ميزانية مشروعك بأعلى كفاءة.</p>
+                <p class="section-desc">نوفر تقديرات أولية تقريبية للحلول المتكاملة لتسهيل دراسة ميزانية مشروعك بأعلى
+                    كفاءة.</p>
             </div>
 
             <div class="packages-grid">
@@ -530,9 +616,12 @@
                         <li><i class="fas fa-check-circle"></i><span>مسجل DVR يدعم المراقبة عبر الجوال</span></li>
                         <li><i class="fas fa-check-circle"></i><span>تجهيز شبكة واي فاي أساسية (مكتبية)</span></li>
                         <li><i class="fas fa-check-circle"></i><span>نظام أكسس كونترول لباب رئيسي واحد</span></li>
-                        <li class="not-included"><i class="fas fa-times-circle"></i><span>أنظمة الذكاء الاصطناعي وكشف التسلل</span></li>
-                        <li class="not-included"><i class="fas fa-times-circle"></i><span>جدار حماية سيبراني Fortinet</span></li>
-                        <li class="not-included"><i class="fas fa-times-circle"></i><span>أنظمة كشف الحريق Hochiki</span></li>
+                        <li class="not-included"><i class="fas fa-times-circle"></i><span>أنظمة الذكاء الاصطناعي وكشف
+                                التسلل</span></li>
+                        <li class="not-included"><i class="fas fa-times-circle"></i><span>جدار حماية سيبراني
+                                Fortinet</span></li>
+                        <li class="not-included"><i class="fas fa-times-circle"></i><span>أنظمة كشف الحريق
+                                Hochiki</span></li>
                     </ul>
                     <a href="#request" class="btn-package">تواصل لطلب الباقة</a>
                 </div>
@@ -555,8 +644,10 @@
                         <li><i class="fas fa-check-circle"></i><span>شبكة واي فاي 6 مدمجة ممتدة (تجوال سلس)</span></li>
                         <li><i class="fas fa-check-circle"></i><span>بصمة حضور وانصراف ZKTeco مع ربط HR</span></li>
                         <li><i class="fas fa-check-circle"></i><span>نظام نداء وتوزيع صوتي لـ 4 مناطق</span></li>
-                        <li class="not-included"><i class="fas fa-times-circle"></i><span>جدار حماية سيبراني مخصص Fortinet</span></li>
-                        <li class="not-included"><i class="fas fa-times-circle"></i><span>نظام حريق معنون معتمد Hochiki</span></li>
+                        <li class="not-included"><i class="fas fa-times-circle"></i><span>جدار حماية سيبراني مخصص
+                                Fortinet</span></li>
+                        <li class="not-included"><i class="fas fa-times-circle"></i><span>نظام حريق معنون معتمد
+                                Hochiki</span></li>
                     </ul>
                     <a href="#request" class="btn-package">تواصل لطلب الباقة</a>
                 </div>
@@ -573,12 +664,16 @@
                         </div>
                     </div>
                     <ul class="package-features">
-                        <li><i class="fas fa-check-circle"></i><span>نظام كاميرات IP AI بالكامل مع غرف مراقبة</span></li>
+                        <li><i class="fas fa-check-circle"></i><span>نظام كاميرات IP AI بالكامل مع غرف مراقبة</span>
+                        </li>
                         <li><i class="fas fa-check-circle"></i><span>تأمين شبكة متكامل بجدار حماية Fortinet</span></li>
                         <li><i class="fas fa-check-circle"></i><span>بنية شبكية وتقسيم VLANs وموزعات Cisco</span></li>
-                        <li><i class="fas fa-check-circle"></i><span>إنذار حريق معنون ذكي معتمد Hochiki الياباني</span></li>
-                        <li><i class="fas fa-check-circle"></i><span>تكامل الأكسس كونترول مع الأبواب والـ ERP</span></li>
-                        <li><i class="fas fa-check-circle"></i><span>شاشات مديول LED وجدران فيديو (Video Walls)</span></li>
+                        <li><i class="fas fa-check-circle"></i><span>إنذار حريق معنون ذكي معتمد Hochiki الياباني</span>
+                        </li>
+                        <li><i class="fas fa-check-circle"></i><span>تكامل الأكسس كونترول مع الأبواب والـ ERP</span>
+                        </li>
+                        <li><i class="fas fa-check-circle"></i><span>شاشات مديول LED وجدران فيديو (Video Walls)</span>
+                        </li>
                         <li><i class="fas fa-check-circle"></i><span>نظام إخلاء صوتي طارئ مدمج</span></li>
                     </ul>
                     <a href="#request" class="btn-package">تواصل لطلب الباقة</a>
@@ -588,7 +683,11 @@
             <!-- Pricing alert strictly required -->
             <div class="pricing-alert-box">
                 <i class="fas fa-circle-exclamation"></i>
-                <p>تنويه هندسي حاسم: جميع الباقات والأسعار المعروضة أعلاه هي أسعار تقريبية تقديرية أولية، وهي غير شاملة نهائياً لتكاليف أعمال التمديد والتأسيس (سواء الداخلية تحت البلاط والجبس أو الخارجية في المواسير الحافظة)، كابلات التوصيل (Coaxial أو Ethernet أو Fiber)، الإكسسوارات، الععلب العازلة، والتركيب والتشغيل. يتم تحديد السعر النهائي والمفصل بدقة متناهية بعد قيام فريقنا التقني بالمعاينة الهندسية المجانية والكاملة للموقع ودراسة المخططات الهندسية.</p>
+                <p>تنويه هندسي حاسم: جميع الباقات والأسعار المعروضة أعلاه هي أسعار تقريبية تقديرية أولية، وهي غير شاملة
+                    نهائياً لتكاليف أعمال التمديد والتأسيس (سواء الداخلية تحت البلاط والجبس أو الخارجية في المواسير
+                    الحافظة)، كابلات التوصيل (Coaxial أو Ethernet أو Fiber)، الإكسسوارات، الععلب العازلة، والتركيب
+                    والتشغيل. يتم تحديد السعر النهائي والمفصل بدقة متناهية بعد قيام فريقنا التقني بالمعاينة الهندسية
+                    المجانية والكاملة للموقع ودراسة المخططات الهندسية.</p>
             </div>
         </div>
     </section>
@@ -599,7 +698,8 @@
             <div class="section-header">
                 <span class="section-badge">سجل طلبيتك الآن</span>
                 <h2 class="section-title">نموذج طلب الخدمة وتصميم الأنظمة المطور</h2>
-                <p class="section-desc">قم ببناء نظامك الهندسي المخصص بنفسك وسنقوم بتجميع الطلب وتنسيقه لإرساله مباشرة للواتساب لدراسته.</p>
+                <p class="section-desc">قم ببناء نظامك الهندسي المخصص بنفسك وسنقوم بتجميع الطلب وتنسيقه لإرساله مباشرة
+                    للواتساب لدراسته.</p>
             </div>
 
             <div class="wizard-card">
@@ -651,33 +751,39 @@
                     <!-- Step 2 Panel -->
                     <div class="wizard-panel" id="stepPanel-2">
                         <h3 class="panel-title">الخطوة 2: تحديد التفاصيل الفنية والهندسية</h3>
-                        
+
                         <!-- Dynamic fields will be inserted here by JavaScript -->
                         <div id="dynamicWizardFields"></div>
 
                         <div class="form-group" style="margin-top:20px;">
                             <label for="client-notes">ملاحظات إضافية أو تفاصيل خاصة للمشروع:</label>
-                            <textarea class="form-control" id="client-notes" placeholder="اكتب هنا أي تفاصيل تهمك، مثل نوع المبنى، مخططات هندسية متوفرة، أو ماركات تفضلها بشكل خاص..."></textarea>
+                            <textarea class="form-control" id="client-notes"
+                                placeholder="اكتب هنا أي تفاصيل تهمك، مثل نوع المبنى، مخططات هندسية متوفرة، أو ماركات تفضلها بشكل خاص..."></textarea>
                         </div>
                     </div>
 
                     <!-- Step 3 Panel -->
                     <div class="wizard-panel" id="stepPanel-3">
                         <h3 class="panel-title">الخطوة 3: معلومات التواصل وتأكيد الطلبية</h3>
-                        
+
                         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:20px;">
                             <div class="form-group">
-                                <label for="client-name">الاسم الكامل للعميل / المؤسسة: <span style="color:var(--accent);">*</span></label>
-                                <input type="text" class="form-control" id="client-name" placeholder="أدخل اسمك أو اسم شركتك الموقرة">
+                                <label for="client-name">الاسم الكامل للعميل / المؤسسة: <span
+                                        style="color:var(--accent);">*</span></label>
+                                <input type="text" class="form-control" id="client-name"
+                                    placeholder="أدخل اسمك أو اسم شركتك الموقرة">
                             </div>
                             <div class="form-group">
-                                <label for="client-phone">رقم الجوال (واتساب للتواصل الفوري): <span style="color:var(--accent);">*</span></label>
-                                <input type="tel" class="form-control" id="client-phone" placeholder="مثال: 0593417639" value="059">
+                                <label for="client-phone">رقم الجوال (واتساب للتواصل الفوري): <span
+                                        style="color:var(--accent);">*</span></label>
+                                <input type="tel" class="form-control" id="client-phone" placeholder="مثال: 0593417639"
+                                    value="059">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="client-city">المدينة/المنطقة في فلسطين: <span style="color:var(--accent);">*</span></label>
+                            <label for="client-city">المدينة/المنطقة في فلسطين: <span
+                                    style="color:var(--accent);">*</span></label>
                             <select class="form-control" id="client-city">
                                 <option value="رام الله والبيرة">رام الله والبيرة</option>
                                 <option value="القدس الشريف">القدس الشريف</option>
@@ -714,7 +820,8 @@
             <div class="section-header">
                 <span class="section-badge">مستجدات التكنولوجيا والأمن</span>
                 <h2 class="section-title">أخبار وتحديثات تقنية متجددة</h2>
-                <p class="section-desc">سحب مباشر وحي لأحدث مستجدات أنظمة المراقبة والشبكات والحماية السيبرانية في فلسطين والعالم.</p>
+                <p class="section-desc">سحب مباشر وحي لأحدث مستجدات أنظمة المراقبة والشبكات والحماية السيبرانية في
+                    فلسطين والعالم.</p>
             </div>
 
             <div class="news-container" id="liveNewsFeedContainer">
@@ -730,14 +837,16 @@
                 <div class="footer-about">
                     <a href="#" class="logo" style="margin-bottom: 20px;">
                         <div class="logo-icon">V</div>
-                        <span class="logo-text">VIRON <span style="font-weight: 400; font-size: 1.1rem; color: var(--accent);">TECH</span></span>
+                        <span class="logo-text">VIRON <span
+                                style="font-weight: 400; font-size: 1.1rem; color: var(--accent);">TECH</span></span>
                     </a>
-                    <p>فيرون تكنولوجي (VIRON TECH) للأنظمة المتكاملة والجهد المنخفض. نصمم وننفذ أرقى البنى التحتية التكنولوجية والحلول الأمنية الذكية في فلسطين بمعايير جودة متفوقة ودقة هندسية لا تضاهى.</p>
+                    <p>فيرون تكنولوجي (VIRON TECH) للأنظمة المتكاملة والجهد المنخفض. نصمم وننفذ أرقى البنى التحتية
+                        التكنولوجية والحلول الأمنية الذكية في فلسطين بمعايير جودة متفوقة ودقة هندسية لا تضاهى.</p>
                     <div class="footer-social">
-                        <a href="https://wa.me/972593417639" class="social-icon" target="_blank"><i class="fab fa-whatsapp"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="https://wa.me/972593417639" class="social-icon" target="_blank" title="واتساب"><i
+                                class="fab fa-whatsapp"></i></a>
+                        <a href="https://www.facebook.com/share/17qepVQjPK/" class="social-icon" target="_blank"
+                            title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
                     </div>
                 </div>
 
@@ -749,7 +858,8 @@
                         <li><a href="#services"><i class="fas fa-angle-left"></i> أنظمة الصوت والنداء العام</a></li>
                         <li><a href="#services"><i class="fas fa-angle-left"></i> الأكسس وحضور وانصراف الموظفين</a></li>
                         <li><a href="#services"><i class="fas fa-angle-left"></i> أنظمة إنذار الحريق Hochiki</a></li>
-                        <li><a href="#services"><i class="fas fa-angle-left"></i> شاشات المديول LED وجدران الفيديو</a></li>
+                        <li><a href="#services"><i class="fas fa-angle-left"></i> شاشات المديول LED وجدران الفيديو</a>
+                        </li>
                     </ul>
                 </div>
 
@@ -798,4 +908,5 @@
     <!-- Scripts -->
     <script src="main.js?v=6.1"></script>
 </body>
+
 </html>

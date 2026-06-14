@@ -43,9 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Theme Toggle (Dark / Light Mode)
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     if (themeToggleBtn) {
-        // Check localStorage or system preference
+        // Check localStorage theme setting (Default to Light Mode)
         const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (savedTheme === 'dark') {
             document.body.classList.add('dark-mode');
             themeToggleBtn.querySelector('i').className = 'fas fa-sun';
         } else {
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             tabButtons.forEach(b => b.classList.remove('active'));
             comparePanels.forEach(p => p.classList.remove('active'));
-            
+
             btn.classList.add('active');
             const targetId = btn.getAttribute('data-target');
             document.getElementById(targetId).classList.add('active');
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const wizardPanels = document.querySelectorAll('.wizard-panel');
     const indicators = document.querySelectorAll('.step-indicator');
     const progressBar = document.querySelector('.wizard-step-progress');
-    
+
     const prevBtn = document.getElementById('wizardPrevBtn');
     const nextBtn = document.getElementById('wizardNextBtn');
 
@@ -343,7 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function updateWizardUI() {
+    function updateWizardUI(shouldScroll = false) {
         // Toggle Panels
         wizardPanels.forEach(panel => panel.classList.remove('active'));
         document.getElementById(`stepPanel-${currentStep}`).classList.add('active');
@@ -377,6 +377,14 @@ document.addEventListener('DOMContentLoaded', () => {
             prevBtn.style.visibility = 'visible';
             nextBtn.innerHTML = 'التالي <i class="fas fa-arrow-left" style="margin-right: 5px;"></i>';
         }
+
+        // Scroll to request section to prevent viewport jumps when steps change height
+        if (shouldScroll) {
+            const requestSection = document.getElementById('request');
+            if (requestSection) {
+                requestSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
     }
 
     if (nextBtn && prevBtn) {
@@ -390,10 +398,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         return;
                     }
                 }
-                
+
                 // Validate Step 2: Ensure dynamic fields are parsed
                 currentStep++;
-                updateWizardUI();
+                updateWizardUI(true);
             } else {
                 // Submit Form: Validate step 3 inputs
                 const clientName = document.getElementById('client-name').value.trim();
@@ -413,13 +421,13 @@ document.addEventListener('DOMContentLoaded', () => {
         prevBtn.addEventListener('click', () => {
             if (currentStep > 1) {
                 currentStep--;
-                updateWizardUI();
+                updateWizardUI(true);
             }
         });
 
         // Initialize dynamic fields
         updateDynamicWizardFields();
-        updateWizardUI();
+        updateWizardUI(false);
     }
 
     function submitOrderToWhatsApp(name, phone, city) {
@@ -429,18 +437,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         let technicalDetails = '';
-        
+
         // Cameras
         if (document.getElementById('sys-cctv').checked) {
             const types = [];
             if (document.getElementById('form-cctv-type-ip')?.checked) types.push("أنظمة شبكية ذكية (IP AI)");
             if (document.getElementById('form-cctv-type-analog')?.checked) types.push("أنظمة تماثلية (HD Analog)");
-            
+
             const brands = [];
             document.querySelectorAll('.form-cctv-brand-cb:checked').forEach(cb => {
                 brands.push(cb.value);
             });
-            
+
             const cctvCount = document.getElementById('form-cctv-count')?.value || '4';
             technicalDetails += `\n*كاميرات المراقبة*: [الأنواع: ${types.join(' + ') || 'غير محدد'}] [الماركات: ${brands.join(' + ') || 'غير محدد'}] [العدد: ${cctvCount} كاميرات]`;
         }
@@ -575,28 +583,31 @@ ${noteStr}
                 excerpt: "دراسة فنية مفصلة توضح كيف تتفوق كاميرات الشبكة IP في التحليل الذكي للوجوه، التنبيهات الفورية على الهاتف وحظر الإنذارات الكاذبة مقارنة بالأنظمة التقليدية.",
                 imageUrl: "https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=600&q=80",
                 date: getRelativeDateArabic(0), // Today
-                serviceKey: "cctv"
+                serviceKey: "cctv",
+                link: "https://www.dahuasecurity.com/"
             },
             {
                 title: "أهمية جدران الحماية Fortinet في تأمين شبكات الشركات الفلسطينية",
                 excerpt: "كيف تساهم أجهزة FortiGate في عزل شبكات المراقبة والكاميرات الذكية عن بيانات الموظفين لمنع تسريب البيانات لرفع مستويات الحماية السيبرانية في فلسطين.",
                 imageUrl: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=600&q=80",
                 date: getRelativeDateArabic(1), // Yesterday
-                serviceKey: "networking"
+                serviceKey: "networking",
+                link: "https://www.fortinet.com/"
             },
             {
                 title: "دليل الدفاع المدني الفلسطيني لاعتماد أنظمة إنذار الحريق Hochiki",
                 excerpt: "توضيح شامل لمعايير السلامة الـ NFPA والأنظمة المعنونة اليابانية التي تسهل وتسهم في ترخيص المنشآت والمصانع التجارية الكبرى داخل مدن فلسطين.",
                 imageUrl: "https://images.unsplash.com/photo-1516216628859-9bccecab13ca?auto=format&fit=crop&w=600&q=80",
                 date: getRelativeDateArabic(3), // 3 Days ago
-                serviceKey: "alarm"
+                serviceKey: "alarm",
+                link: "https://www.hochiki.co.jp/"
             },
             {
                 title: "شاشات المديول LED: الخيار القادم للإعلانات وغرف العمليات الكبرى",
                 excerpt: "تحليل للتوجه المتزايد نحو شاشات العرض الذكية عالية السطوع لإدارة المراقبة التلفزيونية وبناء لوحات إعلانية مميزة في الشوارع والمجمعات الفلسطينية.",
-                imageUrl: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80",
                 date: getRelativeDateArabic(5), // 5 Days ago
-                serviceKey: "led"
+                serviceKey: "led",
+                link: "https://www.novastar.tech/"
             }
         ];
 
@@ -632,25 +643,17 @@ ${noteStr}
                             const link = item.querySelector("link")?.textContent || "";
                             const pubDate = item.querySelector("pubDate")?.textContent || "";
                             const descriptionHtml = item.querySelector("description")?.textContent || "";
-                            
+
                             // Clean description html
                             const tempDiv = document.createElement("div");
                             tempDiv.innerHTML = descriptionHtml;
                             const cleanDesc = tempDiv.textContent || tempDiv.innerText || "";
-                            
-                            // Image match
-                            let imageUrl = "";
-                            const imgMatch = descriptionHtml.match(/<img[^>]+src=["']([^"']+)["']/i);
-                            if (imgMatch && imgMatch[1]) {
-                                imageUrl = imgMatch[1];
-                            }
 
                             latestItems.push({
                                 title: title,
                                 link: link,
                                 pubDate: pubDate,
-                                description: cleanDesc,
-                                thumbnail: imageUrl
+                                description: cleanDesc
                             });
                         }
                         if (latestItems.length > 0) {
@@ -684,26 +687,19 @@ ${noteStr}
                     formattedDate = item.pubDate;
                 }
 
-                let imageUrl = item.thumbnail || `https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80`;
-
-                const serviceKeys = ['cctv', 'networking', 'alarm', 'led'];
-                const mappedService = serviceKeys[index % serviceKeys.length];
+                // Clean "tech" prefix header from feed titles
+                let cleanTitle = item.title || "";
+                cleanTitle = cleanTitle.replace(/^(البوابة العربية للأخبار التقنية|البوابة العربية للأخبار التقنية -)\s*:\s*/i, '');
 
                 const newsCard = document.createElement('div');
                 newsCard.className = 'news-card';
                 newsCard.innerHTML = `
-                    <div class="news-image-wrapper">
-                        <img src="${imageUrl}" alt="${item.title}" class="news-image" onerror="this.src='https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80'">
-                    </div>
                     <div class="news-content">
-                        <h4 class="news-title">${item.title}</h4>
+                        <h4 class="news-title">${cleanTitle}</h4>
                         <p class="news-excerpt">${cleanDesc}</p>
                         <div class="news-meta">
                             <span class="news-date"><i class="far fa-calendar-alt"></i> ${formattedDate}</span>
-                            <div style="display: flex; gap: 10px;">
-                                <a href="${item.link}" target="_blank" class="news-link" style="color: var(--text-muted);">المصدر <i class="fas fa-external-link-alt" style="font-size: 0.75rem;"></i></a>
-                                <a href="#" class="news-link" onclick="event.preventDefault(); openServiceModal('${mappedService}')">التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
-                            </div>
+                            <a href="${item.link}" target="_blank" class="news-link" style="color: var(--accent); font-weight: 700;">اقرأ الخبر من المصدر <i class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i></a>
                         </div>
                     </div>
                 `;
@@ -712,20 +708,17 @@ ${noteStr}
         } else {
             console.warn('Live news fetch failed, showing dynamic Viron Tech articles instead');
             newsContainer.innerHTML = '';
-            
+
             fallbackArticles.forEach(art => {
                 const newsCard = document.createElement('div');
                 newsCard.className = 'news-card';
                 newsCard.innerHTML = `
-                    <div class="news-image-wrapper">
-                        <img src="${art.imageUrl}" alt="${art.title}" class="news-image">
-                    </div>
                     <div class="news-content">
                         <h4 class="news-title">${art.title}</h4>
                         <p class="news-excerpt">${art.excerpt}</p>
                         <div class="news-meta">
                             <span class="news-date"><i class="far fa-calendar-alt"></i> ${art.date}</span>
-                            <a href="#" class="news-link" onclick="event.preventDefault(); openServiceModal('${art.serviceKey}')">عرض التفاصيل التقنية <i class="fas fa-arrow-left"></i></a>
+                            <a href="${art.link}" target="_blank" class="news-link" style="color: var(--accent); font-weight: 700;">اقرأ الخبر من المصدر <i class="fas fa-external-link-alt" style="font-size: 0.8rem;"></i></a>
                         </div>
                     </div>
                 `;
@@ -735,7 +728,7 @@ ${noteStr}
     }
 
     // Modal Control and Service Auto-Request Logic
-    window.openServiceModal = function(serviceKey) {
+    window.openServiceModal = function (serviceKey) {
         const modal = document.getElementById('serviceDetailsModal');
         const modalContent = document.getElementById('modalBodyContent');
         if (!modal || !modalContent) return;
@@ -861,7 +854,7 @@ ${noteStr}
         document.body.style.overflow = 'hidden';
     };
 
-    window.closeServiceModal = function() {
+    window.closeServiceModal = function () {
         const modal = document.getElementById('serviceDetailsModal');
         if (modal) {
             modal.classList.remove('open');
@@ -869,10 +862,10 @@ ${noteStr}
         }
     };
 
-    window.requestServiceDirect = function(serviceKey) {
+    window.requestServiceDirect = function (serviceKey) {
         const checkbox = document.getElementById('sys-' + serviceKey);
         const card = document.querySelector(`.system-select-card[data-sys="${serviceKey}"]`);
-        
+
         if (checkbox) {
             if (!checkbox.checked) {
                 checkbox.checked = true;
@@ -907,7 +900,20 @@ ${noteStr}
         // ── UI Reset ──────────────────────────────────────────────────────────
         startBtn.disabled = true;
         startBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري فحص الشبكة...';
-        solutionsCard.style.display = 'none';
+        
+        const placeholder = document.getElementById('solutionsPlaceholder');
+        const resultBody = document.getElementById('solutionsResultBody');
+        const badge = document.getElementById('networkStatusBadge');
+        if (placeholder) placeholder.style.display = 'none';
+        if (resultBody) resultBody.style.display = 'none';
+        if (badge) {
+            badge.className = 'status-badge';
+            badge.innerText = 'جاري الفحص...';
+            badge.style.backgroundColor = '';
+            badge.style.color = '';
+            badge.style.border = '';
+        }
+
         downloadVal.innerText = '-';
         uploadVal.innerText = '-';
         pingVal.innerText = '-';
@@ -965,7 +971,7 @@ ${noteStr}
                     updateGauge(mbps);
                 }
                 if (performance.now() >= deadline) {
-                    reader.cancel().catch(() => {});
+                    reader.cancel().catch(() => { });
                     break;
                 }
             }
@@ -974,11 +980,11 @@ ${noteStr}
             return (loaded * 8) / (elapsed * 1e6); // Mbps
         }
 
-        // Try two parallel 25 MB Cloudflare streams
+        // Try two parallel 2.5 MB Cloudflare streams to save bandwidth on Palestinian connections
         try {
             const urls = [
-                'https://speed.cloudflare.com/__down?bytes=25000000&t=' + Date.now(),
-                'https://speed.cloudflare.com/__down?bytes=25000000&t=' + (Date.now() + 1)
+                'https://speed.cloudflare.com/__down?bytes=2500000&t=' + Date.now(),
+                'https://speed.cloudflare.com/__down?bytes=2500000&t=' + (Date.now() + 1)
             ];
             const results = await Promise.allSettled(urls.map(u => streamMeasure(u, 7000)));
             const valid = results.filter(r => r.status === 'fulfilled' && r.value > 0.5).map(r => r.value);
@@ -989,10 +995,10 @@ ${noteStr}
             }
         } catch (e) { console.warn('Primary download failed:', e); }
 
-        // Fallback: single 10 MB stream
+        // Fallback: single 1.5 MB stream
         if (!downloadSuccess) {
             try {
-                const mbps = await streamMeasure('https://speed.cloudflare.com/__down?bytes=10000000&t=' + Date.now(), 8000);
+                const mbps = await streamMeasure('https://speed.cloudflare.com/__down?bytes=1500000&t=' + Date.now(), 8000);
                 if (mbps > 0.5) { maxDownload = Math.round(mbps); downloadSuccess = true; }
             } catch (e) { console.warn('Fallback download failed:', e); }
         }
@@ -1015,9 +1021,8 @@ ${noteStr}
         let uploadSuccess = false;
 
         try {
-            // Use text/plain MIME type on the Blob – this is a CORS-safelisted content-type,
             // so the browser skips the OPTIONS preflight entirely (works from any origin).
-            const size = 3 * 1024 * 1024;
+            const size = 1.5 * 1024 * 1024;
             const buf = new Uint8Array(size);
             crypto.getRandomValues(buf.subarray(0, Math.min(size, 65536)));
             const blob = new Blob([buf], { type: 'text/plain' });
@@ -1067,10 +1072,10 @@ ${noteStr}
 
         const cappedSpeed = Math.min(speed, 120);
         const percentage = cappedSpeed / 120;
-        
+
         const rotationGrad = percentage * 180;
         gaugeFill.style.transform = `rotate(${rotationGrad}deg)`;
-        
+
         const rotationNeedle = -90 + (percentage * 180);
         gaugeNeedle.style.transform = `rotate(${rotationNeedle}deg)`;
     }
@@ -1080,9 +1085,9 @@ ${noteStr}
         const intro = document.getElementById('solutionsIntro');
         const list = document.getElementById('solutionsList');
         const solutionsCard = document.getElementById('solutionsCard');
-        
+
         if (!badge || !intro || !list || !solutionsCard) return;
-        
+
         list.innerHTML = '';
         badge.className = 'status-badge';
 
@@ -1093,7 +1098,7 @@ ${noteStr}
 
         if (download >= 50) {
             statusClass = 'excellent';
-            badgeText = 'اتصال ممتاز 🚀';
+            badgeText = '<i class="fas fa-rocket" style="margin-left: 6px;"></i> اتصال ممتاز';
             introText = `سرعة اتصالك ممتازة وتبلغ **${download} Mbps** مع زمن استجابة (Ping) يبلغ **${ping} ms**. هذه السرعة مثالية لتشغيل أحدث المنظومات الأمنية وحلول الجهد المنخفض دون أي بطء.`;
             solutions = [
                 "الشبكة تدعم تشغيل نظام كاميرات مراقبة IP بدقة 4K فائقة الوضوح وبث مباشر مستمر دون أي تأخير.",
@@ -1103,7 +1108,7 @@ ${noteStr}
             ];
         } else if (download >= 20) {
             statusClass = 'good';
-            badgeText = 'اتصال مستقر 👍';
+            badgeText = '<i class="fas fa-thumbs-up" style="margin-left: 6px;"></i> اتصال مستقر';
             introText = `اتصالك جيد ومستقر بسرعة **${download} Mbps** وزمن استجابة **${ping} ms**. السرعة جيدة جداً للتصفح والأعمال اليومية، ولكن يفضل اتخاذ بعض الإجراءات لضمان ثبات أنظمة الكاميرات والشبكات الذكية.`;
             solutions = [
                 "توصية هندسية: يفضل فصل شبكة الكاميرات والأنظمة الذكية (VLAN) عن شبكة الاستخدام الشخصي (الإنترنت العام للموظفين أو العائلة) لضمان عدم تأثر جودة الكاميرات بالاستخدام العام.",
@@ -1112,7 +1117,7 @@ ${noteStr}
             ];
         } else {
             statusClass = 'weak';
-            badgeText = 'اتصال ضعيف ⚠️';
+            badgeText = '<i class="fas fa-exclamation-triangle" style="margin-left: 6px;"></i> اتصال ضعيف';
             introText = `سرعة اتصالك منخفضة وتساوي **${download} Mbps** مع بنج يبلغ **${ping} ms**. قد تواجه بطئاً أو تقطيعاً عند استعراض بث الكاميرات عن بعد أو تشغيل الأنظمة الذكية.`;
             solutions = [
                 "توصية حرجة: تجنب تماماً ربط كاميرات المراقبة بالواي فاي؛ استخدم كابلات الشبكة Cat6 النحاسية وتغذيتها بـ PoE للحصول على بث مستمر بلا انقطاع.",
@@ -1123,7 +1128,7 @@ ${noteStr}
         }
 
         badge.classList.add(statusClass);
-        badge.innerText = badgeText;
+        badge.innerHTML = badgeText;
         intro.innerHTML = introText.replace(/\*\*([^*]+)\*\*/g, '<strong style="color:var(--text-main); font-weight:700;">$1</strong>');
 
         solutions.forEach(sol => {
@@ -1132,6 +1137,10 @@ ${noteStr}
             list.appendChild(li);
         });
 
+        const placeholder = document.getElementById('solutionsPlaceholder');
+        const resultBody = document.getElementById('solutionsResultBody');
+        if (placeholder) placeholder.style.display = 'none';
+        if (resultBody) resultBody.style.display = 'block';
         solutionsCard.style.display = 'block';
     }
 
@@ -1143,10 +1152,10 @@ ${noteStr}
         return 1 - (1 - x) * (1 - x);
     }
 
-    // 8. Newsletter Form Submission (Formspree AJAX)
+    // 8. Newsletter Form Submission (Simulated Fake Subscription per user request)
     const newsletterForm = document.getElementById('newsletterForm');
     if (newsletterForm) {
-        newsletterForm.addEventListener('submit', async function(e) {
+        newsletterForm.addEventListener('submit', function (e) {
             e.preventDefault();
             const submitBtn = document.getElementById('newsletterSubmitBtn');
             const emailInput = newsletterForm.querySelector('input[type="email"]');
@@ -1156,31 +1165,13 @@ ${noteStr}
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
 
-            try {
-                const response = await fetch('https://formspree.io/f/xbdbdvev', {
-                    method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email: emailInput.value
-                    })
-                });
-
-                if (response.ok) {
-                    alert('شكرًا لك! تم الاشتراك بنجاح في قائمتنا البريدية.');
-                    newsletterForm.reset();
-                } else {
-                    throw new Error('Failed to submit form');
-                }
-            } catch (error) {
-                console.error('Newsletter error:', error);
-                alert('عذرًا، حدث خطأ أثناء إرسال طلبك. يرجى المحاولة مرة أخرى لاحقًا.');
-            } finally {
+            // Simulate server response delay
+            setTimeout(() => {
+                alert('شكرًا لك! تم الاشتراك بنجاح في قائمتنا البريدية.');
+                newsletterForm.reset();
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = originalBtnText;
-            }
+            }, 800);
         });
     }
 
